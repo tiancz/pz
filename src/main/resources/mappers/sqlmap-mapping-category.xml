@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tian.zone.dao.category.CategoryDAO">
+	<select id="getCategorys" resultType="com.tian.zone.dto.article.CategoryDTO">
+		select * from coffee_blog_category
+	</select>
+	<select id="getCategorysById" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.CategoryDTO">
+		select c.category_name from coffee_blog_category c where c.category_id in (${_parameter})
+	</select>
+	<select id="getCategoryIdByName" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.CategoryDTO">
+		select c.category_id from coffee_blog_category c where c.category_name in (${_parameter});
+	</select>
+	<insert id="createCategory">
+		insert into coffee_blog_category(category_id,category_name,category_date)
+		values
+		(#{id},#{name},#{date})
+	</insert>
+	<select id="getTags" resultType="com.tian.zone.dto.article.TagDTO">
+		select * from coffee_blog_tag
+	</select>
+	<select id="getTagIdByTagsName" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.TagDTO">
+		select a.tag_id from coffee_blog_tag a where a.tag_name in (${_parameter})
+	</select>
+</mapper>
