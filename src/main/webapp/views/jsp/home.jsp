@@ -16,10 +16,24 @@
  #user_icon {margin:0px 30px 15px -50px;}
  #abstract {margin:-40px 30px 5px 0px;}
 </style>
-<script type="text/javascript" src="<%=basePath%>/views/js/jquery/jquery-2.1.4.min.js">
+<script type="text/javascript" src="<%=basePath%>/views/js/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>/views/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="<%=basePath%>/views/ckfinder/ckfinder.js"></script>
+<script type="text/javascript">
+    var editor = null;
+    window.onload = function(){
+    	//CKFinder.setupCKEditor();
+        editor = CKEDITOR.replace('ckeditor'); //参数‘ckeditor’是textarea元素的name属性值，而非id属性值
+        editor.getData();
+        CKFinder.setupCKEditor( editor, '../' ) ;
+    }
 </script>
-<script>
-
+<script type="text/javascript">
+    function save(){
+        editor.updateElement(); //非常重要的一句代码
+        //前台验证工作
+        //提交到后台
+    }
 </script>
 </head>
 <body>
@@ -34,7 +48,7 @@
   <div id="abstract">摘要</div>
   <div id="content">
 	内容&#34;
-	<%for(int i=0;i<6;i++)
+	<%for(int i=0;i<3;i++)
 	{
 		out.print("this is text that just you like.");
 	}
@@ -48,7 +62,7 @@
   <div id="abstract">摘要</div>
   <div id="content">
 	内容
-	<%for(int i=0;i<6;i++)
+	<%for(int i=0;i<3;i++)
 	{
 		out.print("this is text that just you like.");
 	}
@@ -62,14 +76,23 @@
   <div id="abstract">摘要</div>
   <div id="content">
 	内容
-	<%for(int i=0;i<6;i++)
+	<%for(int i=0;i<3;i++)
 	{
 		out.print("this is text that just you like.");
 	}
 	%>
     <div id="content_footer">footer</div>
   </div>
+  <div>
+  	<form id="detailForm" action="submit.do" method="get">
+	    <textarea id="ckeditor" name="ckeditor"></textarea>
+	    <input type="submit" value="保存" id="submit" onclick="save()" />
+	</form>
+  </div>
 </div>
+
+<div src="<%=basePath%>/views/ckfinder/_samples/ckeditor.html"></div>
+
 </div>
 </body>
 </html>

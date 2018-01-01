@@ -21,7 +21,7 @@
     	<mvc:annotation-driven validator="validator"></mvc:annotation-driven>
     	
 		<!-- 当前请求为"/"时,则跳转到/zone/index -->
-		<mvc:view-controller path="/" view-name="home"/>
+		<mvc:view-controller path="/" view-name="index.html"/>
     	
     	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
 	   		<property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>  
