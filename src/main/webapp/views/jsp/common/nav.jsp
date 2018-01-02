@@ -1,18 +1,16 @@
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page language="java" pageEncoding="UTF-8"%>
 <%@page contentType="text/html; charset=UTF-8"%>
 <%String basePath = request.getScheme()+"://"+request.getServerName()+":"
 +request.getLocalPort()+request.getContextPath();%>
-<link rel="stylesheet" href="<%=basePath%>/views/css/common/common.css" type="text/css" />
+<link rel="stylesheet" href="<%=basePath%>/views/css/common/nav.css" type="text/css" />
 <div class="nav">
-	<ul>
-		<li><a href="/cola/home/home">Home</a></li>
-		<li><a href="/cola/moment/moment">说句话</a></li>
-		<li><a href="/cola/photo/photo">发照片</a></li>
-		<li><a href="/cola/note/createNote">写随笔</a></li>
-		<li><a href="/cola/note/checkNote">看随笔</a></li>
-		<li><a href="/cola/programmer/programmer">程序猿</a></li>
-		<li><a href="/cola/music/music">听音乐</a></li>
-		<li><a href="/cola/movie/movie">看电影</a></li>
-	</ul>
+	<div class="menu">
+		<ul>
+			<li><a href="/cola/home/home"><i class="fa fa-home fa-fw"></i>首页</a></li>
+			<li><a href="/cola/moment/moment"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+			<li><a href="/cola/photo/photo"><i class="fa fa-th fa-fw"></i>分类</a></li>
+			<li><a href="/cola/note/createNote"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+			<li><a href="/cola/note/checkNote"><i class="fa fa-user fa-fw"></i>关于</a></li>
+		</ul>
+	</div>
 </div>

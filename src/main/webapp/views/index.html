@@ -1,7 +1,6 @@
 <html>
 <head>
 <title>Home</title>
-{% load static %}
 <link type="text/css" href="{% static 'blog/css/font-awesome.min.css' %}" rel="stylesheet">
 <style type="text/css">
 body{
@@ -110,26 +109,22 @@ a:hover{
 </script>
 </head>
 <body>
-<header>
 <div class="nav">
-<div class="icon">
-<h1>Tiancz</h1>
+	<div class="icon">
+		<h1>Tiancz</h1>
+	</div>
+	<div class="menu">
+		<ul>
+			<li><a href="{% url 'blog:index' %}"><i class="fa fa-home fa-fw"></i>首页</a></li>
+			<li><a href="{% url 'blog:archive' %}"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+			<li><a href="{% url 'blog:category' %}"><i class="fa fa-th fa-fw"></i>分类</a></li>
+			<li><a href="{% url 'blog:tags' %}"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+			<li><a href="{% url 'blog:about' %}"><i class="fa fa-user fa-fw"></i>关于</a></li>
+		</ul>
+	</div>
 </div>
-<div class="menu">
-<ul>
-<li><a href="{% url 'blog:index' %}"><i class="fa fa-home fa-fw"></i>首页</a></li>
-<li><a href="{% url 'blog:archive' %}"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-<li><a href="{% url 'blog:category' %}"><i class="fa fa-th fa-fw"></i>分类</a></li>
-<li><a href="{% url 'blog:tags' %}"><i class="fa fa-tags fa-fw"></i>标签</a></li>
-<li><a href="{% url 'blog:about' %}"><i class="fa fa-user fa-fw"></i>关于</a></li>
-</ul>
-</div>
-</div>
-</header>
 <div class="content">
-{% for blog in blogs %}
 	<div class="blog">
-	{% autoescape off %}
 		<div class="title">
 			<a href="{% url 'blog:blog_detail' blog.id %}">
 			{{ blog.title }}
@@ -139,12 +134,9 @@ a:hover{
 			<span class="author" style="color:#4a86e8">write by {{ blog.author }}</span>
 		</div>
 		<div class="summary">
-			{{ blog.content|truncatewords:100}}
 		</div>
 		<hr size="3" width="80%" color=#000>
-	{% endautoescape %}
 	</div>
-{% endfor %}
 
 </div>
 <div class="pagination">
