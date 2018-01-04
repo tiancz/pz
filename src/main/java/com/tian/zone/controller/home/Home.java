@@ -1,14 +1,20 @@
 package com.tian.zone.controller.home;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tian.zone.dto.article.ArticleDTO;
+import com.tian.zone.service.article.ArticleService;
 
 /**
  * <p>Title:Home</p>
@@ -22,12 +28,16 @@ import com.alibaba.fastjson.JSONObject;
 public class Home {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Home.class);
 
+	@Autowired
+	private ArticleService articleService;
 	@RequestMapping("/home")
-	public String toHome(){
+	public ModelAndView toHome(ModelAndView model){
 		LOGGER.info("to home");
-		String url = "";
-		url = "home";
-		return url;
+		List<ArticleDTO> articles = articleService.getAllArticle();
+		model.setViewName("home");
+		model.addObject("articles", articles);
+		LOGGER.info("model:"+JSONObject.toJSONString(model));
+		return model;
 	}
 	
 	@RequestMapping("submit.do")

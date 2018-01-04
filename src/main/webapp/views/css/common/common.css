@@ -4,10 +4,10 @@ body{
 }
 .wrapper{
 	margin:150px auto;
-	width:950px;
+	width:90%;
 }
 .content{
-	width:70%;
+	width:80%;
 	margin:50px auto;
 }
 a{
@@ -33,11 +33,24 @@ a:hover{
 	text-decoration:none;
 }
 .title{
+	min-width:5px;
+	max-width:10px;
+	font-size:26px;
+	font-weight:400;
+	text-align:center;
+}
+.blogTitle{
+	min-width:5px;
+	max-width:10px;
 	font-size:26px;
 	font-weight:400;
 	text-align:center;
 }
 .summary{
+	font-family:'Lato',"PingFang SC","Microsoft YaHei",sans-serif;
+	font-size:14px;
+}
+.blogCon{
 	font-family:'Lato',"PingFang SC","Microsoft YaHei",sans-serif;
 	font-size:14px;
 }

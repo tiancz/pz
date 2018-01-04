@@ -21,6 +21,21 @@
 	
 	<!-- <association column="countComment" property="articleId" select="getBlogCountComment" /> -->
 	
+	<select id="getAllArticle" resultType="com.tian.zone.dto.article.ArticleDTO">
+		SELECT
+			a.id,
+			a.title,
+			a.author,
+			a.content,
+			a.date_created,
+			a.date_updated,
+			a.category_id
+		FROM
+			blog_blog a
+		ORDER BY
+			a.date_updated
+	</select>
+	
 	<select id="getBlogs" resultType="com.tian.zone.dto.article.ArticleDTO">
 		select  article_id articleId,
 				article_title articleTitle,
@@ -43,7 +58,7 @@
 		select cba.*,cu.username,cbc.category_name from coffee_blog_article cba,coffee_user cu,coffee_blog_category cbc where cu.id = cba.user_id and cba.category_id = cbc.category_id
 	</select>
 	<select id="getArticleByID" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.ArticleDTO">
-		select * from coffee_blog_article where article_id=#{id}
+		select * from blog_blog where id=#{id}
 	</select>
 	<insert id="addArticle" parameterType="com.tian.zone.dto.article.ArticleDTO">
 		insert into coffee_blog_article(article_id,article_title,article_content,date_created,date_updated,user_id,category_id,tag_id)

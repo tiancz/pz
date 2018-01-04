@@ -36,20 +36,26 @@
 <jsp:include flush="true" page="/views/jsp/common/nav.jsp" />
 <div class="wrapper">
 	<div class="content">
+		<c:forEach items="${articles}" var="article">
 		<div class="blog">
 			<div class="title">
-				<a href="{% url 'blog:blog_detail' blog.id %}">
-				{{ blog.title }}
-				</a>
+				<ul>
+					<li>
+						<a href="<%=basePath%>/article/articleDetial.do?id=<c:out value='${article.id}'/>">
+						<c:out value="${article.title}"/>
+						</a>
+					</li>
+				</ul>
 			</div>
 			<div class="info">
-				<span class="author" style="color:#4a86e8">write by {{ blog.author }}</span>
+				<span class="date" style="color:#4a86e8">write by <c:out value="${article.dateUpdated}"/></span>
 			</div>
 			<div class="summary">
-				{{ blog.content|truncatewords:100}}
+				<c:out value="${article.content}"/>
 			</div>
 			<hr size="3" width="80%" color=#000>
 		</div>
+		</c:forEach>
 	</div>
 	<div>
 		<form id="detailForm" action="submit.do" method="get">
