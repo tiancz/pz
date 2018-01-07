@@ -37,4 +37,13 @@ public class ArticleController {
 		LOGGER.info("model:"+JSONObject.toJSONString(model));
 		return model;
 	}
+	@RequestMapping("/addArticle.do")
+	public ModelAndView addArticle(HttpServletRequest request,ModelAndView model){
+		LOGGER.info("add a article");
+		//ArticleDTO article = articleService.getArticleDetail((String)request.getParameter("id"));
+		model.setViewName("note/addNote");
+		//model.addObject("article", article);
+		LOGGER.info("model:"+JSONObject.toJSONString(model));
+		return model;
+	}
 }
