@@ -33,7 +33,7 @@
 		FROM
 			blog_blog a
 		ORDER BY
-			a.date_updated
+			a.date_updated desc
 	</select>
 	
 	<select id="getBlogs" resultType="com.tian.zone.dto.article.ArticleDTO">

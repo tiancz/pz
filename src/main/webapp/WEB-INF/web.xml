@@ -105,11 +105,11 @@
   <!-- 错误页 -->
   <error-page>
   	<error-code>404</error-code>
-  	<location>/views/errorPage/404</location>
+  	<location>/views/jsp/errorPage/404.html</location>
   </error-page>
   <error-page>
   	<error-code>500</error-code>
-  	<location>/views/errorPage/500</location>
+  	<location>/views/errorPage/500.html</location>
   </error-page>
   <error-page>
   	<exception-type>org.apache.shiro.authz.AuthorizationException</exception-type>

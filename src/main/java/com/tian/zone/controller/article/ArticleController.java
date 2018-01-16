@@ -6,7 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -37,13 +40,24 @@ public class ArticleController {
 		LOGGER.info("model:"+JSONObject.toJSONString(model));
 		return model;
 	}
-	@RequestMapping("/addArticle.do")
-	public ModelAndView addArticle(HttpServletRequest request,ModelAndView model){
-		LOGGER.info("add a article");
-		//ArticleDTO article = articleService.getArticleDetail((String)request.getParameter("id"));
+	@RequestMapping("/writeArticle.do")
+	public ModelAndView writeArticle(ModelAndView model){
+		LOGGER.info("to write a article");
 		model.setViewName("note/addNote");
-		//model.addObject("article", article);
 		LOGGER.info("model:"+JSONObject.toJSONString(model));
 		return model;
+	}
+
+	@RequestMapping(value="/addArticle.do",method=RequestMethod.POST)
+	public @ResponseBody JSONObject addArticle(@RequestBody JSONObject req){
+		LOGGER.info("add a article");
+		LOGGER.info("note:"+JSONObject.toJSONString(req));
+		JSONObject resp = new JSONObject();
+		String content = req.getString("note");
+		ArticleDTO article = new ArticleDTO();
+		article.setContent(content);
+		resp.put("view","jsp/note/noteDetail");
+		resp.put("article", article);
+		return resp;
 	}
 }

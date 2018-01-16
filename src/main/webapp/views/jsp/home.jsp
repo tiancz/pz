@@ -10,7 +10,13 @@
 <link rel="stylesheet" href="<%=basePath%>/views/css/common/common.css" type="text/css" />
 <link rel="stylesheet" href="<%=basePath%>/views/static/css/font-awesome.min.css" type="text/css" />
 <style type="text/css">
-
+.blog{
+	margin:50px 150px 50px 150px;
+	width:90%;
+}
+.blog .title{
+	text-align:center;
+}
 </style>
 <script type="text/javascript" src="<%=basePath%>/views/js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>/views/ckeditor/ckeditor.js"></script>
@@ -48,7 +54,7 @@
 				</ul>
 			</div>
 			<div class="info">
-				<span class="date" style="color:#4a86e8">write by <c:out value="${article.dateUpdated}"/></span>
+				<span class="date" style="color:#4a86e8"><c:out value="${article.dateUpdated}"/></span>
 			</div>
 			<div class="summary">
 				<c:out value="${article.content}"/>
