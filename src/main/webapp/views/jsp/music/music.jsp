@@ -8,6 +8,7 @@
 <title>Music</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <link rel="stylesheet" href="<%=basePath%>/views/css/common/common.css" type="text/css" />
+<link rel="stylesheet" href="http://localhost:8080/pz/views/css/common/nav.css" type="text/css" />
 <style type="text/css">
 </style>
 <script type="text/javascript" src="<%=basePath%>/views/js/jquery/jquery-2.1.4.min.js">

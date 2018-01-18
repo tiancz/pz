@@ -1,0 +1,88 @@
+<html>
+<head>
+<title>your homepage</title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<link rel="stylesheet" href="http://localhost:8080/pz/views/css/common/common.css" type="text/css" />
+<link rel="stylesheet" href="http://localhost:8080/pz/views/css/common/nav.css" type="text/css" />
+<link rel="stylesheet" href="http://localhost:8080/pz/views/static/css/font-awesome.min.css" type="text/css" />
+<style type="text/css">
+.blog{
+	margin:50px 150px 50px 150px;
+	width:90%;
+}
+.blog .title{
+	text-align:center;
+}
+</style>
+<script type="text/javascript" src="http://localhost:8080/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://localhost:8080/pz/views/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="http://localhost:8080/pz/views/ckfinder/ckfinder.js"></script>
+</head>
+<body>
+<div class="nav">
+	<div class="menu">
+		<ul>
+			<li><a href="/zone/home/home"><i class="fa fa-home fa-fw"></i>首页</a></li>
+			<li><a href="/zone/note/archive"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+			<li><a href="/zone/note/category"><i class="fa fa-th fa-fw"></i>分类</a></li>
+			<li><a href="/zone/note/tag"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+			<li><a href="/zone/about"><i class="fa fa-user fa-fw"></i>关于</a></li>
+		</ul>
+	</div>
+</div>
+<div class="wrapper">
+	<div class="content" id="content">
+	</div>
+</div>
+</body>
+<script type="text/javascript">
+    var editor = null;
+    window.onload = function(){
+    	//CKFinder.setupCKEditor();
+        editor = CKEDITOR.replace('ckeditor'); //参数‘ckeditor’是textarea元素的name属性值，而非id属性值
+        editor.getData();
+        CKFinder.setupCKEditor( editor, '../' ) ;
+    }
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var data = '';
+	var JsonData = JSON.stringify(data);
+	$.ajax({
+		url:'http://localhost:8080/pz/home/home',
+		type:'POST',
+		dataType:'json',
+		contentType:'application/json',
+		data:JsonData,
+		async:false,
+		success:function(data){
+			console.log(JSON.stringify(data));
+			var html = '';
+			var articles = data.articles;
+			for(var i=0; i<articles.length; i++){
+				var article = articles[i];
+				html+='<div class="blog">'
+				+'<div class="title">'
+				+'<ul>'
+				+'<li>'
+				+'<a href="http://localhost:8080/pz/article/articleDetial.do?id='+article.id+'">'+article.title+'</a>'
+				+'</li>'
+				+'</ul>'
+				+'</div>'
+				+'<div class="info">'
+				+'<span class="date" style="color:#4a86e8">'+article.dateUpdated+'</span>'
+				+'</div>'
+				+'<div class="summary">'+article.content+'</div>'
+				+'<hr size="3" width="80%" color=#000>'
+				+'</div>';
+			}
+			console.log(html);
+			$('#content').html(html);
+		},
+		error:function(xhr){
+			alert("123")
+		}
+	});
+});
+</script>
+</html>
