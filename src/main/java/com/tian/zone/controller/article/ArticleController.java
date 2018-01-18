@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tian.zone.dto.article.ArticleDTO;
@@ -31,23 +30,16 @@ public class ArticleController {
 
 	@Autowired
 	private ArticleService articleService;
-	@RequestMapping("/articleDetial.do")
-	public ModelAndView articleDetail(HttpServletRequest request,ModelAndView model){
-		LOGGER.info("article id:"+request.getParameter("id"));
-		ArticleDTO article = articleService.getArticleDetail((String)request.getParameter("id"));
-		model.setViewName("note/noteDetail");
-		model.addObject("article", article);
-		LOGGER.info("model:"+JSONObject.toJSONString(model));
-		return model;
+	@RequestMapping(value="/articleDetial.do",method=RequestMethod.POST)
+	public @ResponseBody JSONObject articleDetail(HttpServletRequest req){
+		LOGGER.info("article id:"+req.getParameter("id"));
+		JSONObject resp = new JSONObject();
+		ArticleDTO article = articleService.getArticleDetail(req.getParameter("id"));
+		resp.put("article", article);
+		LOGGER.info("resp:"+JSONObject.toJSONString(resp));
+		return resp;
 	}
-	@RequestMapping("/writeArticle.do")
-	public ModelAndView writeArticle(ModelAndView model){
-		LOGGER.info("to write a article");
-		model.setViewName("note/addNote");
-		LOGGER.info("model:"+JSONObject.toJSONString(model));
-		return model;
-	}
-
+	
 	@RequestMapping(value="/addArticle.do",method=RequestMethod.POST)
 	public @ResponseBody JSONObject addArticle(@RequestBody JSONObject req){
 		LOGGER.info("add a article");
@@ -56,7 +48,7 @@ public class ArticleController {
 		String content = req.getString("note");
 		ArticleDTO article = new ArticleDTO();
 		article.setContent(content);
-		resp.put("view","jsp/note/noteDetail");
+		articleService.insertArticle(article);
 		resp.put("article", article);
 		return resp;
 	}

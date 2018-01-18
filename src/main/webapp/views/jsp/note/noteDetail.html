@@ -1,22 +1,11 @@
 <html>
 <head>
-<title>your homepage</title>
+<title>Blog Programming</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <link rel="stylesheet" href="http://localhost:8080/pz/views/css/common/common.css" type="text/css" />
 <link rel="stylesheet" href="http://localhost:8080/pz/views/css/common/nav.css" type="text/css" />
 <link rel="stylesheet" href="http://localhost:8080/pz/views/static/css/font-awesome.min.css" type="text/css" />
-<style type="text/css">
-.blog{
-	margin:50px 150px 50px 150px;
-	width:90%;
-}
-.blog .title{
-	text-align:center;
-}
-</style>
 <script type="text/javascript" src="http://localhost:8080/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="http://localhost:8080/pz/views/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="http://localhost:8080/pz/views/ckfinder/ckfinder.js"></script>
 </head>
 <body>
 <div class="nav">
@@ -30,26 +19,25 @@
 		</ul>
 	</div>
 </div>
+
 <div class="wrapper">
-	<div class="content" id="content">
+	<div class="content">
+		<div class="blog" id="blog">
+		
+		</div>
 	</div>
 </div>
-</body>
-<script type="text/javascript">
-    var editor = null;
-    window.onload = function(){
-    	//CKFinder.setupCKEditor();
-        editor = CKEDITOR.replace('ckeditor'); //参数‘ckeditor’是textarea元素的name属性值，而非id属性值
-        editor.getData();
-        CKFinder.setupCKEditor( editor, '../' ) ;
-    }
-</script>
 <script type="text/javascript">
 $(document).ready(function(){
+	var url=location.search;
+	if(url.indexOf("?")!=-1){
+		var str = url.substr(1);
+		strs = str.split("&");
+	}
 	var data = '';
 	var JsonData = JSON.stringify(data);
 	$.ajax({
-		url:'http://localhost:8080/pz/home/home',
+		url:'http://localhost:8080/pz/article/articleDetial.do?id='+strs[0].split("=")[1],
 		type:'POST',
 		dataType:'json',
 		contentType:'application/json',
@@ -57,27 +45,22 @@ $(document).ready(function(){
 		async:false,
 		success:function(data){
 			console.log(JSON.stringify(data));
-			var html = '';
-			var articles = data.articles;
-			for(var i=0; i<articles.length; i++){
-				var article = articles[i];
-				html+='<div class="blog">'
-				+'<div class="title">'
-				+'<ul>'
-				+'<li>'
-				+'<a href="http://localhost:8080/pz/views/jsp/note/noteDetail.html?id='+article.id+'">'+article.title+'</a>'
-				+'</li>'
-				+'</ul>'
-				+'</div>'
-				+'<div class="info">'
-				+'<span class="date" style="color:#4a86e8">'+article.dateUpdated+'</span>'
-				+'</div>'
-				+'<div class="summary">'+article.content+'</div>'
-				+'<hr size="3" width="80%" color=#000>'
-				+'</div>';
-			}
+			var article = data.article;
+			var html = '<div class="blogTitle">'
+			+'<ul>'
+			+'<li>'+article.title+'</li>'
+			+'</ul>'
+			+'</div>'
+			+'<div class="info">'
+			+'<span class="date" style="color:#4a86e8">write by '+article.dateUpdated+'</span>'
+			+'</div>'
+			+'<div class="blogCon">'+article.content+'</div>'
+			+'<div class="blogFoot">'
+			+'posted @'+article.author+'&nbsp;&nbsp;'+article.dateCreated+' 阅读('+article.countComment+') 评论('+article.countComment+')'
+			+'<a href="javascript:void(0);" onclick="update();">编辑</a>'
+			+'</div>';
 			console.log(html);
-			$('#content').html(html);
+			$('#blog').html(html);
 		},
 		error:function(xhr){
 			alert("123")
@@ -85,4 +68,5 @@ $(document).ready(function(){
 	});
 });
 </script>
+</body>
 </html>

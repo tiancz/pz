@@ -16,4 +16,6 @@ public interface ArticleService {
 	public List<ArticleDTO> getAllArticle();
 	
 	public ArticleDTO getArticleDetail(String id);
+	
+	public ArticleDTO insertArticle(ArticleDTO article);
 }
