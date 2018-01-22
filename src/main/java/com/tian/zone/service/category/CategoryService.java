@@ -1,14 +1,14 @@
-package com.tian.zone.dao.category;
+package com.tian.zone.service.category;
 
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * <p>Title:CategoryDAO</p>
+ * <p>Title:CategoryService</p>
  * <p>Description:</p>
  * @author tianchaozhe665
  * @Email nathanieltian@163.com
- * @date 2017年10月8日 下午3:40:07
+ * @date 2018年1月19日 下午11:21:08
  **/
-public interface CategoryDAO {
+public interface CategoryService {
 	public JSONObject categoryList(JSONObject obj);
 }
