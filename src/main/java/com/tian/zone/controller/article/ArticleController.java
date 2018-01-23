@@ -45,10 +45,12 @@ public class ArticleController {
 		LOGGER.info("add a article");
 		LOGGER.info("note:"+JSONObject.toJSONString(req));
 		JSONObject resp = new JSONObject();
-		String content = req.getString("note");
+		String title = req.getString("title");
+        String content = req.getString("note");
 		ArticleDTO article = new ArticleDTO();
+        article.setTitle(title);
 		article.setContent(content);
-		articleService.insertArticle(article);
+		//articleService.insertArticle(article);
 		resp.put("article", article);
 		return resp;
 	}
