@@ -15,6 +15,10 @@ span{
 	-khtml-user-select:none; /*早期浏览器*/
 	user-select:none;
 }
+#title{
+	text-align:left;
+	vertical-align:middle;
+}
 </style>
 <script type="text/javascript" src="http://localhost:8080/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="http://localhost:8080/pz/views/ckeditor/ckeditor.js"></script>
@@ -50,9 +54,9 @@ span{
 
 <div class="wrapper">
 	<div class="content">
-		<div class="title">
+		<div class="title" id="title">
 			<label>题目:</label>
-			<input name="note_title" autofocus="autofocus" value="" style="width:582px;">
+			<input name="note_title" id="note_title" autofocus="autofocus" value="" style="font-size:20px;width:580px;height:30px"><p>
 		</div>
 		<div id=textContent>
 		    <textarea id="ckeditor" name="ckeditor"></textarea>
@@ -111,7 +115,9 @@ span{
 			}*/
 		});
 		$('#textContent #submit').click(function(){
+			var title =  $('#note_title').val();
 			var data = {
+					'title':title,
 					'note':editor.getData()
 			}
 			var JsonData = JSON.stringify(data);
