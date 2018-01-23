@@ -52,22 +52,16 @@ public class ArticleServiceImpl implements ArticleService {
 
 		Date d = new Date();
 		Random r = new Random();
-		ArticleDTO resultArticle = new ArticleDTO();
 		
-		//article.setTitle(article.getTitle());
-		article.setTitle("test");
+		article.setTitle(article.getTitle());
 		article.setContent(article.getContent());
 //		article.setCategory(tags);
 		article.setId(d.getTime()+""+r.nextInt(10));
-		article.setAuthor("00001");
+		article.setAuthor("nathanieltian");
 //		yyyy-MM-dd HH:mm:ss
 		article.setDateCreated(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 		article.setDateUpdated(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-//		String categoryId = categoryService.getCategoryIdByName("getCategoryIdByName",article.getCategory());
-//		List<CategoryDTO> categoryId = categoryService.getCategoryIdByName("getCategoryIdByName",article.getCategory());
-		article.setCategoryId("00014");
-//		article.setCategoryId(categoryId);
-//		resInt = articleService.insertArticle("addArticle", article);
+		article.setCategoryId(article.getCategoryId());
 		/*String tags = article.getTag();
 		if(tags.split(",").length==1){
 			tags = "'"+tags+"'";
@@ -100,10 +94,6 @@ public class ArticleServiceImpl implements ArticleService {
 		}else{
 			LOGGER.info("insert a Article");
 		}
-		resultArticle = articleDao.getArticleById("getArticleByID",article.getId());
-		resultArticle.setContent(article.getContent());
-		resultArticle.setTitle(article.getTitle());
-		resultArticle.setId(article.getId());
-		return resultArticle;
+		return article;
 	}
 }

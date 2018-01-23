@@ -50,7 +50,7 @@ public class ArticleController {
 		ArticleDTO article = new ArticleDTO();
         article.setTitle(title);
 		article.setContent(content);
-		//articleService.insertArticle(article);
+		articleService.insertArticle(article);
 		resp.put("article", article);
 		return resp;
 	}
