@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,13 +49,10 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public ArticleDTO insertArticle(ArticleDTO article) {
 
-		Date d = new Date();
-		Random r = new Random();
-		
 		article.setTitle(article.getTitle());
 		article.setContent(article.getContent());
 //		article.setCategory(tags);
-		article.setId(d.getTime()+""+r.nextInt(10));
+		article.setId(System.currentTimeMillis()+"");
 		article.setAuthor("nathanieltian");
 //		yyyy-MM-dd HH:mm:ss
 		article.setDateCreated(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));

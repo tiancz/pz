@@ -62,15 +62,15 @@ span{
 		    <textarea id="ckeditor" name="ckeditor"></textarea>
 		    <button type="button" id="submit">保存</button>
 		</div>
-		<div class="tag">
-			<label>标签:</label>
-			<div class="tagId" id="tagId">
-				<span id="coffee">加奶油</span>
-			</div>
-		</div>
 		<div class="category">
 			<label>分类:</label>
 			<div class="categoryId" id="categoryId">
+			</div>
+		</div>
+		<div class="tag" id="tag">
+			<label>标签:</label>
+			<div class="tagId" id="tagId">
+				<span id="coffee">加奶油</span>
 			</div>
 		</div>
 	</div>
@@ -92,7 +92,7 @@ span{
 				var categorys = data.dataList;
 				for(var i=0; i<categorys.length; i++){
 					var category = categorys[i];
-					//html+='<span style="margin: 2px 2px;">'+category.name+'</span>';
+					html+='<span style="margin: 2px 2px;">'+category.name+'</span>';
 				}
 				console.log(html);
 				$('#categoryId').html(html);
@@ -101,7 +101,7 @@ span{
 				alert("123")
 			}
 		});
-		$("span").click(function(){
+		$("#tag span").click(function(){
 			this.setAttribute("click", "on");
 			alert(("clickv" in this));
 			if(!("clickv" in this)||this.getAttribute("clickv")=="off"){
