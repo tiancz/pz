@@ -62,9 +62,9 @@ span{
 		    <textarea id="ckeditor" name="ckeditor"></textarea>
 		    <button type="button" id="submit">保存</button>
 		</div>
-		<div class="category">
+		<div class="categoryDiv">
 			<label>分类:</label>
-			<div class="categoryId" id="categoryId">
+			<div id="categoryValue">
 			</div>
 		</div>
 		<div class="tag" id="tag">
@@ -88,14 +88,15 @@ span{
 			async:false,
 			success:function(data){
 				console.log(JSON.stringify(data));
-				var html = '';
+				var html = '<select id="categoryId"><option>--请选择--</option>';
 				var categorys = data.dataList;
 				for(var i=0; i<categorys.length; i++){
 					var category = categorys[i];
-					html+='<span style="margin: 2px 2px;">'+category.name+'</span>';
+					html+='<option value="'+category.id+'">'+category.name+'</option>';
 				}
+				html+='</select>';
 				console.log(html);
-				$('#categoryId').html(html);
+				$('#categoryValue').html(html);
 			},
 			error:function(xhr){
 				alert("123")
@@ -121,11 +122,12 @@ span{
 		});
 		$('#textContent #submit').click(function(){
 			var title =  $('#note_title').val();
-			var category =  $('#category').val();
+			var category = $("#categoryId").find("option:selected").val();
 			var tag =  $('#tag').val();
 			var data = {
 					'title':title,
-					'note':editor.getData()
+					'note':editor.getData(),
+					'category':category
 			}
 			var JsonData = JSON.stringify(data);
 			$.ajax({
