@@ -88,7 +88,7 @@ span{
 			async:false,
 			success:function(data){
 				console.log(JSON.stringify(data));
-				var html = '<select id="categoryId"><option>--请选择--</option>';
+				var html = '<select id="categoryId"><option value="0">--请选择--</option>';
 				var categorys = data.dataList;
 				for(var i=0; i<categorys.length; i++){
 					var category = categorys[i];
@@ -122,12 +122,16 @@ span{
 		});
 		$('#textContent #submit').click(function(){
 			var title =  $('#note_title').val();
-			var category = $("#categoryId").find("option:selected").val();
+			var categoryId = $("#categoryId").find("option:selected").val();
+			if((!categoryId)||categoryId.length==0||categoryId==0){
+				alert("请选择分类");
+				return false;
+			}
 			var tag =  $('#tag').val();
 			var data = {
 					'title':title,
 					'note':editor.getData(),
-					'category':category
+					'categoryId':categoryId
 			}
 			var JsonData = JSON.stringify(data);
 			$.ajax({
@@ -139,7 +143,7 @@ span{
 				async:false,
 				success:function(data){
 					var id = data.article.id;
-					window.location.href ="http://localhost:8080/pz/views/jsp/note/noteDetail.html?id="+id;
+					window.location.href ="http://localhost:8080/pz/views/html/note/noteDetail.html?id="+id;
 				}
 			});
 		});

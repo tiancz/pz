@@ -49,15 +49,11 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public ArticleDTO insertArticle(ArticleDTO article) {
 
-		article.setTitle(article.getTitle());
-		article.setContent(article.getContent());
-//		article.setCategory(tags);
 		article.setId(System.currentTimeMillis()+"");
 		article.setAuthor("nathanieltian");
 //		yyyy-MM-dd HH:mm:ss
 		article.setDateCreated(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
 		article.setDateUpdated(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-		article.setCategoryId(article.getCategoryId());
 		/*String tags = article.getTag();
 		if(tags.split(",").length==1){
 			tags = "'"+tags+"'";

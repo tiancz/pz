@@ -47,9 +47,11 @@ public class ArticleController {
 		JSONObject resp = new JSONObject();
 		String title = req.getString("title");
         String content = req.getString("note");
+        String categoryId = req.getString("categoryId");
 		ArticleDTO article = new ArticleDTO();
         article.setTitle(title);
 		article.setContent(content);
+		article.setCategoryId(categoryId);
 		articleService.insertArticle(article);
 		resp.put("article", article);
 		return resp;
