@@ -1,15 +1,19 @@
 package com.tian.zone.service.article.impl;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tian.zone.dao.article.ArticleDAO;
 import com.tian.zone.dto.article.ArticleDTO;
 import com.tian.zone.service.article.ArticleService;
@@ -39,6 +43,52 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		return articles;
 	}
+
+	@Override
+	public Map<String, List<ArticleDTO>> getAllArticle(JSONObject req) {
+		Map<String, List<ArticleDTO>> result = new HashMap<>();
+		List<ArticleDTO> articles = articleDao.getAllArticle();
+		LOGGER.info("articles:"+JSONObject.toJSONString(articles));
+		String type = req.getString("type");
+		for (ArticleDTO articleDTO : articles) {
+			articleDTO.setDateCreated(articleDTO.getDateCreated().substring(0, 10));
+			articleDTO.setDateUpdated(articleDTO.getDateUpdated().substring(0, 10));
+			List<ArticleDTO> newArticles = new ArrayList<>();
+			if("time".equals(type)){
+				String time = articleDTO.getDateCreated().substring(0, 7);
+				if(result.containsKey(time)){
+					result.get(time).add(articleDTO);
+				}else{
+					newArticles.add(articleDTO);
+					result.put(time, newArticles);
+				}
+			}
+			if("tag".equals(type)){
+				String tag = articleDTO.getTag();
+				if(tag==null){
+					newArticles.add(articleDTO);
+					result.put("无标签", newArticles);
+				}
+				if(result.containsKey(tag)){
+					result.get(tag).add(articleDTO);
+				}else{
+					newArticles.add(articleDTO);
+					result.put(tag, newArticles);
+				}
+			}
+			if("category".equals(type)){
+				String category = articleDTO.getCategory();
+				if(result.containsKey(category)){
+					result.get(category).add(articleDTO);
+				}else{
+					newArticles.add(articleDTO);
+					result.put(category, newArticles);
+				}
+			}
+		}
+		return result;
+	}
+	
 	@Override
 	public ArticleDTO getArticleDetail(String id) {
 		ArticleDTO article = articleDao.getArticleById("getArticleByID", id);
@@ -87,5 +137,15 @@ public class ArticleServiceImpl implements ArticleService {
 			LOGGER.info("insert a Article");
 		}
 		return article;
+	}
+	public String getMethod(String str) {
+		return "get"+str.substring(0,1).toUpperCase()+str.substring(1, str.length());
+	}
+	public static void main(String[] args) throws Exception {
+		ArticleDTO article = new ArticleDTO();
+		article.setCategory("12");
+		Method getCategory = article.getClass().getMethod("getCategory");
+		String str = (String)getCategory.invoke(article.getClass().newInstance(), null);
+		System.out.println(str);
 	}
 }

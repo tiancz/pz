@@ -19,6 +19,12 @@ span{
 	text-align:left;
 	vertical-align:middle;
 }
+#categoryDiv{
+	margin:20px;
+}
+#tagDiv{
+	margin:20px;
+}
 </style>
 <script type="text/javascript" src="http://localhost:8080/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="http://localhost:8080/pz/views/ckeditor/ckeditor.js"></script>
@@ -60,19 +66,20 @@ span{
 		</div>
 		<div id=textContent>
 		    <textarea id="ckeditor" name="ckeditor"></textarea>
-		    <button type="button" id="submit">保存</button>
 		</div>
-		<div class="categoryDiv">
+		<div class="categoryDiv" id="categoryDiv" >
 			<label>分类:</label>
 			<div id="categoryValue">
 			</div>
 		</div>
-		<div class="tag" id="tag">
+		<div class="tagDiv" id="tagDiv">
 			<label>标签:</label>
 			<div class="tagId" id="tagId">
 				<span id="coffee">加奶油</span>
 			</div>
 		</div>
+		
+		<button type="button" id="submit">保存</button>
 	</div>
 </div>
 <script>
@@ -88,7 +95,7 @@ span{
 			async:false,
 			success:function(data){
 				console.log(JSON.stringify(data));
-				var html = '<select id="categoryId"><option value="0">--请选择--</option>';
+				var html = '<select id="categoryId" style="width:180px;text-align:center;"><option value="0">--请选择--</option>';
 				var categorys = data.dataList;
 				for(var i=0; i<categorys.length; i++){
 					var category = categorys[i];

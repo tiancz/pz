@@ -29,9 +29,11 @@
 			a.content,
 			a.date_created,
 			a.date_updated,
-			a.category_id
+			a.category_id,
+			b.name category,
+			d.name tag
 		FROM
-			blog_blog a
+			blog_blog a left join blog_category b on a.category_id = b.id left join blog_tags c on a.id = c.blog_id left join blog_tag d on c.tag_id = d.id
 		ORDER BY
 			a.date_updated desc
 	</select>

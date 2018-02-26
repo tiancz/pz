@@ -1,5 +1,8 @@
 package com.tian.zone.controller.article;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -30,6 +33,17 @@ public class ArticleController {
 
 	@Autowired
 	private ArticleService articleService;
+	
+	@RequestMapping(value="/articleList.do",method=RequestMethod.POST)
+	public @ResponseBody JSONObject articleList(@RequestBody JSONObject req){
+		LOGGER.info("req:"+JSONObject.toJSONString(req));
+		req.put("type", "tag");
+		JSONObject resp = new JSONObject();
+		Map<String,List<ArticleDTO>> article = articleService.getAllArticle(req);
+		resp.put("articles", article);
+		LOGGER.info("resp:"+JSONObject.toJSONString(resp));
+		return resp;
+	}
 	@RequestMapping(value="/articleDetial.do",method=RequestMethod.POST)
 	public @ResponseBody JSONObject articleDetail(HttpServletRequest req){
 		LOGGER.info("article id:"+req.getParameter("id"));

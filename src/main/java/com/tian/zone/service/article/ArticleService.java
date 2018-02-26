@@ -1,7 +1,9 @@
 package com.tian.zone.service.article;
 
 import java.util.List;
+import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
 import com.tian.zone.dto.article.ArticleDTO;
 
 /**
@@ -14,6 +16,8 @@ import com.tian.zone.dto.article.ArticleDTO;
 public interface ArticleService {
 	
 	public List<ArticleDTO> getAllArticle();
+	
+	public Map<String,List<ArticleDTO>> getAllArticle(JSONObject req);
 	
 	public ArticleDTO getArticleDetail(String id);
 	
