@@ -2,9 +2,9 @@
 <head>
 <title>your homepage</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<link rel="stylesheet" href="http://localhost:8080/pz/views/css/common/common.css" type="text/css" />
-<link rel="stylesheet" href="http://localhost:8080/pz/views/css/common/nav.css" type="text/css" />
-<link rel="stylesheet" href="http://localhost:8080/pz/views/static/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="../css/common/common.css" type="text/css" />
+<link rel="stylesheet" href="../css/common/nav.css" type="text/css" />
+<link rel="stylesheet" href="../static/css/font-awesome.min.css" type="text/css" />
 <style type="text/css">
 .blog{
 	margin:50px 150px 50px 150px;
@@ -17,19 +17,19 @@
 	vertical-align:middle;
 }
 </style>
-<script type="text/javascript" src="http://localhost:8080/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="http://localhost:8080/pz/views/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="http://localhost:8080/pz/views/ckfinder/ckfinder.js"></script>
+<script type="text/javascript" src="../js/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="../ckfinder/ckfinder.js"></script>
 </head>
 <body>
 <div class="nav">
 	<div class="menu">
 		<ul>
-			<li><a href="../html/home.html"><i class="fa fa-home fa-fw"></i>首页</a></li>
-			<li><a href="../html/note/archiveBlog.html"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-			<li><a href="../html/note/categoryBlog.html"><i class="fa fa-th fa-fw"></i>分类</a></li>
-			<li><a href="../html/note/tagBlog.html"><i class="fa fa-tags fa-fw"></i>标签</a></li>
-			<li><a href="../html/about.html"><i class="fa fa-user fa-fw"></i>关于</a></li>
+			<li><a href="home.html"><i class="fa fa-home fa-fw"></i>首页</a></li>
+			<li><a href="note/archiveBlog.html"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+			<li><a href="note/categoryBlog.html"><i class="fa fa-th fa-fw"></i>分类</a></li>
+			<li><a href="note/tagBlog.html"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+			<li><a href="about.html"><i class="fa fa-user fa-fw"></i>关于</a></li>
 		</ul>
 	</div>
 </div>
@@ -68,7 +68,7 @@ $(document).ready(function(){
 					+'<div class="title">'
 					+'<ul>'
 					+'<li>'
-					+'<a href="http://localhost:8080/pz/views/html/note/noteDetail.html?id='+article.id+'">'+article.title+'</a>'
+					+'<a href="../html/note/noteDetail.html?id='+article.id+'">'+article.title+'</a>'
 					+'</li>'
 					+'</ul>'
 					+'</div>'
