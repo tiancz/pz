@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tian.zone.dao.article.ArticleDAO;
@@ -65,7 +66,7 @@ public class ArticleServiceImpl implements ArticleService {
 			}
 			if("tag".equals(type)){
 				String tag = articleDTO.getTag();
-				if(tag==null){
+				if(ObjectUtils.isEmpty(tag)){
 					newArticles.add(articleDTO);
 					result.put("无标签", newArticles);
 				}

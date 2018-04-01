@@ -35,14 +35,14 @@ public class ArticleController {
 	private ArticleService articleService;
 	
 	@RequestMapping(value="/articleList.do",method=RequestMethod.POST)
-	public @ResponseBody JSONObject articleList(@RequestBody JSONObject req){
+	public @ResponseBody String articleList(@RequestBody JSONObject req){
 		LOGGER.info("req:"+JSONObject.toJSONString(req));
 		req.put("type", "tag");
 		JSONObject resp = new JSONObject();
 		Map<String,List<ArticleDTO>> article = articleService.getAllArticle(req);
 		resp.put("articles", article);
 		LOGGER.info("resp:"+JSONObject.toJSONString(resp));
-		return resp;
+		return resp.toJSONString();
 	}
 	@RequestMapping(value="/articleDetial.do",method=RequestMethod.POST)
 	public @ResponseBody JSONObject articleDetail(HttpServletRequest req){
