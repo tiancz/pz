@@ -36,12 +36,6 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public List<ArticleDTO> getAllArticle() {
 		List<ArticleDTO> articles = articleDao.getAllArticle();
-		List<ArticleDTO> newArticles = new ArrayList<>();
-		for (ArticleDTO articleDTO : articles) {
-			articleDTO.setDateCreated(articleDTO.getDateCreated().substring(0, 10));
-			articleDTO.setDateUpdated(articleDTO.getDateUpdated().substring(0, 10));
-			newArticles.add(articleDTO);
-		}
 		return articles;
 	}
 
@@ -52,8 +46,6 @@ public class ArticleServiceImpl implements ArticleService {
 		LOGGER.info("articles:"+JSONObject.toJSONString(articles));
 		String type = req.getString("type");
 		for (ArticleDTO articleDTO : articles) {
-			articleDTO.setDateCreated(articleDTO.getDateCreated().substring(0, 10));
-			articleDTO.setDateUpdated(articleDTO.getDateUpdated().substring(0, 10));
 			List<ArticleDTO> newArticles = new ArrayList<>();
 			if("time".equals(type)){
 				String time = articleDTO.getDateCreated().substring(0, 7);
@@ -93,8 +85,6 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public ArticleDTO getArticleDetail(String id) {
 		ArticleDTO article = articleDao.getArticleById("getArticleByID", id);
-		article.setDateCreated(article.getDateCreated().substring(0, 10));
-		article.setDateUpdated(article.getDateUpdated().substring(0, 10));
 		return article;
 	}
 	@Override

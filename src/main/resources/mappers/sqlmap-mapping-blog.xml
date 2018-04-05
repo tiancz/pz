@@ -19,9 +19,35 @@
 		<result column="countComment" property="countComment"/>
 	</resultMap>
 	
+	<resultMap type="com.tian.zone.dto.article.ArticleDTO" id="articleTagResultMap">
+		<id column="tagId" property="tagId"/>
+		<result column="id" property="id"/>
+		<result column="title" property="title"/>
+		<result column="author" property="author"/>
+		<result column="content" property="content"/>
+		<result column="date_created" property="dateCreated"/>
+		<result column="date_updated" property="dateUpdated"/>
+		<result column="category_id" property="categoryId"/>
+		<result column="category" property="category"/>
+		<result column="tag" property="tag"/>
+		<association column="tagId" property="tagId" select="getArticleSubTagResult" />
+	</resultMap>
+	
+	<resultMap type="com.tian.zone.dto.article.ArticleDTO" id="articleSubTagResultMap">
+		<id column="tagId" property="tagId"/>
+		<result column="id" property="id"/>
+		<result column="title" property="title"/>
+		<result column="author" property="author"/>
+		<result column="content" property="content"/>
+		<result column="date_created" property="dateCreated"/>
+		<result column="date_updated" property="dateUpdated"/>
+		<result column="category_id" property="categoryId"/>
+		<result column="category" property="category"/>
+		<result column="tag" property="tag"/>
+	</resultMap>
 	<!-- <association column="countComment" property="articleId" select="getBlogCountComment" /> -->
 	
-	<select id="getAllArticle" resultType="com.tian.zone.dto.article.ArticleDTO">
+	<select id="getAllArticle" resultMap="articleTagResultMap">
 		SELECT
 			a.id,
 			a.title,
@@ -31,9 +57,29 @@
 			a.date_updated,
 			a.category_id,
 			b.name category,
+			d.id tagId,
 			d.name tag
 		FROM
 			blog_blog a left join blog_category b on a.category_id = b.id left join blog_tags c on a.id = c.blog_id left join blog_tag d on c.tag_id = d.id
+		ORDER BY
+			a.date_updated desc
+	</select>
+	
+	<select id="getArticleSubTagResult" parameterType="java.lang.String" resultMap="articleSubTagResultMap">
+		SELECT
+			a.id,
+			a.title,
+			a.author,
+			a.content,
+			a.date_created,
+			a.date_updated,
+			a.category_id,
+			b.name category,
+			d.id tagId,
+			d.name tag
+		FROM
+			blog_blog a left join blog_category b on a.category_id = b.id left join blog_tags c on a.id = c.blog_id left join blog_tag d on c.tag_id = d.id
+		where d.id = #{tagId}
 		ORDER BY
 			a.date_updated desc
 	</select>
@@ -42,8 +88,8 @@
 		select  article_id articleId,
 				article_title articleTitle,
 				article_content articleContent,
-				date_format(date_created,'%Y-%m-%d') dateCreated,
-				date_format(date_updated,'%Y-%m-%d') dateUpdated,
+				date_created dateCreated,
+				date_updated dateUpdated,
 				user_id userId,
 				(select u.username from coffee_user u where u.id=a.user_id) userName,
 				category_id categoryId,
@@ -65,7 +111,7 @@
 	<insert id="addArticle" parameterType="com.tian.zone.dto.article.ArticleDTO">
 		insert into blog_blog(id,title,content,date_created,date_updated,author,category_id)
 		values
-		(#{id},#{title},#{content},date_format(#{dateCreated},'%Y-%m-%d'),date_format(#{dateUpdated},'%Y-%m-%d'),#{author},#{categoryId})
+		(#{id},#{title},#{content},#{dateCreated},#{dateUpdated},#{author},#{categoryId})
 	</insert>
 	<delete id="delteArticleByID" parameterType="java.lang.String">
 		delete from coffee_blog_article where article_id=#{id}
