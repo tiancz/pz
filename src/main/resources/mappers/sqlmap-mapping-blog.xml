@@ -47,7 +47,7 @@
 	</resultMap>
 	<!-- <association column="countComment" property="articleId" select="getBlogCountComment" /> -->
 	
-	<select id="getAllArticle" resultMap="articleTagResultMap">
+	<select id="getAllArticle" resultType="com.tian.zone.dto.article.ArticleDTO">
 		SELECT
 			a.id,
 			a.title,
