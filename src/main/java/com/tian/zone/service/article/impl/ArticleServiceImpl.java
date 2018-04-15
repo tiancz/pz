@@ -63,13 +63,14 @@ public class ArticleServiceImpl implements ArticleService {
 					List<ArticleDTO> newArticles = new ArrayList<>();
 					newArticles.add(articleDTO);
 					result.put("无标签", newArticles);
-				}
-				if(result.containsKey(tag)){
-					result.get(tag).add(articleDTO);
 				}else{
-					List<ArticleDTO> newArticles = new ArrayList<>();
-					newArticles.add(articleDTO);
-					result.put(tag, newArticles);
+					if(result.containsKey(tag)){
+						result.get(tag).add(articleDTO);
+					}else{
+						List<ArticleDTO> newArticles = new ArrayList<>();
+						newArticles.add(articleDTO);
+						result.put(tag, newArticles);
+					}
 				}
 			}
 			if("category".equals(type)){

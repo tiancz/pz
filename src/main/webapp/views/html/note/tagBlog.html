@@ -33,23 +33,13 @@ $(document).ready(function(){
 		success:function(data){
 			console.log(JSON.stringify(data));
 			var html = '';
-			var articles = data.articles;
-			for(var i=0; i<articles.length; i++){
-				var article = articles[i];
-				html+='<div class="blog">'
-					+'<div class="title">'
-					+'<ul>'
-					+'<li>'
-					+'<a href="http://localhost:8080/pz/views/html/note/noteDetail.html?id='+article.id+'">'+article.title+'</a>'
-					+'</li>'
-					+'</ul>'
-					+'</div>'
-					+'<div class="info">'
-					+'<span class="date" style="color:#4a86e8">'+article.dateUpdated+'</span>'
-					+'</div>'
-					+'<div class="summary">'+article.content+'</div>'
-					+'<hr size="3" width="80%" color=#000>'
-					+'</div>';
+			var str = data.articles;
+			//var obj = eval ("(" + jsonObj + ")");
+			var obj = str.parseJSON();
+			for(var i=0,l=obj.length;i<l;i++){
+				for(var key in obj[i]){
+					alert(key+':'+obj[i][key]);
+				}
 			}
 			console.log(html);
 			$('#content').html(html);
