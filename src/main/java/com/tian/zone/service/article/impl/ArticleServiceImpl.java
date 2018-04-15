@@ -45,13 +45,14 @@ public class ArticleServiceImpl implements ArticleService {
 		List<ArticleDTO> articles = articleDao.getAllArticle();
 		LOGGER.info("articles:"+JSONObject.toJSONString(articles));
 		String type = req.getString("type");
+		
 		for (ArticleDTO articleDTO : articles) {
-			List<ArticleDTO> newArticles = new ArrayList<>();
 			if("time".equals(type)){
 				String time = articleDTO.getDateCreated().substring(0, 7);
 				if(result.containsKey(time)){
 					result.get(time).add(articleDTO);
 				}else{
+					List<ArticleDTO> newArticles = new ArrayList<>();
 					newArticles.add(articleDTO);
 					result.put(time, newArticles);
 				}
@@ -59,12 +60,14 @@ public class ArticleServiceImpl implements ArticleService {
 			if("tag".equals(type)){
 				String tag = articleDTO.getTag();
 				if(ObjectUtils.isEmpty(tag)){
+					List<ArticleDTO> newArticles = new ArrayList<>();
 					newArticles.add(articleDTO);
 					result.put("无标签", newArticles);
 				}
 				if(result.containsKey(tag)){
 					result.get(tag).add(articleDTO);
 				}else{
+					List<ArticleDTO> newArticles = new ArrayList<>();
 					newArticles.add(articleDTO);
 					result.put(tag, newArticles);
 				}
@@ -74,6 +77,7 @@ public class ArticleServiceImpl implements ArticleService {
 				if(result.containsKey(category)){
 					result.get(category).add(articleDTO);
 				}else{
+					List<ArticleDTO> newArticles = new ArrayList<>();
 					newArticles.add(articleDTO);
 					result.put(category, newArticles);
 				}
