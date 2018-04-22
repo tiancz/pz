@@ -45,7 +45,7 @@ public class ArticleServiceImpl implements ArticleService {
 		List<ArticleDTO> articles = articleDao.getAllArticle();
 		LOGGER.info("articles:"+JSONObject.toJSONString(articles));
 		String type = req.getString("type");
-		
+		LOGGER.info("type:"+type);
 		for (ArticleDTO articleDTO : articles) {
 			if("time".equals(type)){
 				String time = articleDTO.getDateCreated().substring(0, 7);
@@ -75,12 +75,18 @@ public class ArticleServiceImpl implements ArticleService {
 			}
 			if("category".equals(type)){
 				String category = articleDTO.getCategory();
-				if(result.containsKey(category)){
-					result.get(category).add(articleDTO);
-				}else{
+				if(ObjectUtils.isEmpty(category)){
 					List<ArticleDTO> newArticles = new ArrayList<>();
 					newArticles.add(articleDTO);
-					result.put(category, newArticles);
+					result.put("未分类", newArticles);
+				}else{
+					if(result.containsKey(category)){
+						result.get(category).add(articleDTO);
+					}else{
+						List<ArticleDTO> newArticles = new ArrayList<>();
+						newArticles.add(articleDTO);
+						result.put(category, newArticles);
+					}
 				}
 			}
 		}

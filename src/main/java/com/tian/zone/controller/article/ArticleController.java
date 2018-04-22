@@ -37,7 +37,6 @@ public class ArticleController {
 	@RequestMapping(value="/articleList.do",method=RequestMethod.POST)
 	public @ResponseBody String articleList(@RequestBody JSONObject req){
 		LOGGER.info("req:"+JSONObject.toJSONString(req));
-		req.put("type", "tag");
 		JSONObject resp = new JSONObject();
 		Map<String,List<ArticleDTO>> article = articleService.getAllArticle(req);
 		resp.put("articles", article);
