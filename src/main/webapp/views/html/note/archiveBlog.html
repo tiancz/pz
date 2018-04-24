@@ -19,6 +19,45 @@
 </style>
 <script>
 $(document).ready(function(){
+	var data = '';
+	var JsonData = JSON.stringify({});
+	$.ajax({
+		url:'http://localhost:8080/pz/archive/getYear.do',
+		type:'POST',
+		dataType:'json',
+		contentType:'application/json',
+		data:JsonData,
+		async:false,
+		success:function(data){
+			console.log(JSON.stringify(data));
+			getMonth();
+		},
+		error:function(xhr){
+			alert("查询出错")
+		}
+	});
+});
+function getMonth(){
+	var data = {
+			year:'2017'
+	};
+	var JsonData = JSON.stringify({data});
+	$.ajax({
+		url:'http://localhost:8080/pz/archive/getMonth.do',
+		type:'POST',
+		dataType:'json',
+		contentType:'application/json',
+		data:JsonData,
+		async:false,
+		success:function(data){
+			console.log(JSON.stringify(data));
+		},
+		error:function(xhr){
+			alert("查询出错")
+		}
+	});
+}
+function getArchiveBlog(){
 	var data = {
 		type:"time"
 	};
@@ -67,7 +106,7 @@ $(document).ready(function(){
 			alert("查询出错")
 		}
 	});
-});
+}
 </script>
 </head>
 <body>
