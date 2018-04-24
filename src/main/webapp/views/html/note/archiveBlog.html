@@ -2,8 +2,9 @@
 <head>
 <title>Blog Programming</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<link rel="stylesheet" href="/pz/views/css/common/nav.css" type="text/css" />
-<link rel="stylesheet" href="/pz/views/static/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="../../css/common/nav.css" type="text/css" />
+<link rel="stylesheet" href="../../static/css/font-awesome.min.css" type="text/css" />
+<script type="text/javascript" src="../../js/jquery/jquery-2.1.4.min.js"></script>
 <style type="text/css">
 .blog{
 	margin:50px 150px 50px 150px;
@@ -11,19 +12,62 @@
 }
 .content{
 	width:80%;
-	margin:50px auto;
+	margin:150px auto;
 	text-align:center;
 	vertical-align:middle;
 }
 </style>
-<script type="text/javascript" src="../js/jquery/jquery-2.1.4.min.js"></script>
 <script>
-	/* $(document).ready(function(){
-	}); */
-
-	function update(){
-		alert(123);
-	}
+$(document).ready(function(){
+	var data = {
+		type:"time"
+	};
+	var JsonData = JSON.stringify(data);
+	$.ajax({
+		url:'http://localhost:8080/pz/article/articleList.do',
+		type:'POST',
+		dataType:'json',
+		contentType:'application/json',
+		data:JsonData,
+		async:false,
+		success:function(data){
+			var html = '';
+			var times = data.articles;
+			for(time in times){
+				console.log(JSON.stringify(time));
+				var blogs = times[time];
+				html += '<div class="tag">'
+					+'<h1>'
+					+time
+					+'</h1>'
+					+'</div>';
+				for(blog in blogs){
+					var article = blogs[blog];
+					html += '<div class="blogTitle">'
+						+'<ul>'
+						+'<li>'
+						+'<a href="noteDetail.html?id='+article.id+'">'+article.title+'</a>'
+						+'</li>'
+						+'</ul>'
+						+'</div>'
+						+'<div class="info">'
+						+'<span class="date" style="color:#4a86e8">write by '+article.dateUpdated+'</span>'
+						+'</div>'
+						+'<div class="blogCon">'+article.content+'</div>'
+						+'<div class="blogFoot">'
+						+'posted @'+article.author+'&nbsp;&nbsp;'+article.dateCreated+' 阅读('+article.countComment+') 评论('+article.countComment+')'
+						+'<a href="javascript:void(0);" onclick="update();">编辑</a>'
+						+'</div>';
+				}
+			}
+			console.log(JSON.stringify(html));
+			$('#content').html(html);
+		},
+		error:function(xhr){
+			alert("查询出错")
+		}
+	});
+});
 </script>
 </head>
 <body>
@@ -39,35 +83,8 @@
 	</div>
 </div>
 <div class="wrapper">
-<p>
-<div class="main">
-	<div class="sideBar"></div>
-	<div class="blog">
-  		<div class="blogTitle" style="font-size:16;">
-  			android开发中的数据库SQLite的使用
-		</div>
-  		<div class="blogCon" style="font-size:16;">摘要: 其实学习android很久了，关于数据存储，之前学习的时候也一同学习过，编程这些东西很久没用都忘得差不多了，最近做个项目要用到，所以又学习了一遍。android中关于数据<p>的存储有好几种，这次主要是SQLite的使用。首先说一点，我的技术很烂，原理什么的不说了，就是讲一下怎么使用，包括“增删改查”这几...
-  			<a>阅读全文</a>
-  		</div>
-  		<div class="blogFoot" style="font-size:16;">
-  			posted @ 2015-03-11 13:58 楚莫言 阅读(201) 评论(0) 
-  			<a href="/cola/note/edit">编辑</a>
-  		</div>
-	</div>
-	<c:forEach items="${notes}" var="note">
-		<div class="blog">
-  			<div class="blogTitle">
-  				<c:out value="${note.articleTitle}"/>
-  			</div>
-			<div class="blogCon" style="font-size:16;">
-				<c:out value="${note.articleContent}"/>
-  			</div>
-  			<div class="blogFoot">
-  				posted @<c:out value="${note.userName}"/>&nbsp;&nbsp;<c:out value="${note.dateCreated}"/> 阅读(<c:out value="${note.countComment}"/>) 评论(<c:out value="${note.countComment}"/>) 
-  				<a href="javascript:void(0);" onclick="update();">编辑</a>
-  			</div>
-		</div>
-	</c:forEach>
+<div class="content" id="content">
+	
 </div>
 </div>
 </body>

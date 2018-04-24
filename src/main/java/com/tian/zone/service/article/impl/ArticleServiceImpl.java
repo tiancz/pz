@@ -48,7 +48,7 @@ public class ArticleServiceImpl implements ArticleService {
 		LOGGER.info("type:"+type);
 		for (ArticleDTO articleDTO : articles) {
 			if("time".equals(type)){
-				String time = articleDTO.getDateCreated().substring(0, 7);
+				String time = articleDTO.getDateCreated();
 				if(result.containsKey(time)){
 					result.get(time).add(articleDTO);
 				}else{
