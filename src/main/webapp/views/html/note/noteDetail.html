@@ -1,11 +1,11 @@
 <html>
 <head>
-<title>Blog Programming</title>
+<title>Blog</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<link rel="stylesheet" href="/pz/views/css/common/common.css" type="text/css" />
-<link rel="stylesheet" href="/pz/views/css/common/nav.css" type="text/css" />
-<link rel="stylesheet" href="/pz/views/static/css/font-awesome.min.css" type="text/css" />
-<script type="text/javascript" src="/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" href="../../css/common/common.css" type="text/css" />
+<link rel="stylesheet" href="../../css/common/nav.css" type="text/css" />
+<link rel="stylesheet" href="../../static/css/font-awesome.min.css" type="text/css" />
+<script type="text/javascript" src="../../js/jquery/jquery-2.1.4.min.js"></script>
 </head>
 <body>
 <div class="nav">
@@ -21,10 +21,7 @@
 </div>
 
 <div class="wrapper">
-	<div class="content">
-		<div class="blog" id="blog">
-		
-		</div>
+	<div class="content" id="content">
 	</div>
 </div>
 <script type="text/javascript">
@@ -46,21 +43,20 @@ $(document).ready(function(){
 		success:function(data){
 			console.log(JSON.stringify(data));
 			var article = data.article;
-			var html = '<div class="blogTitle">'
-			+'<ul>'
-			+'<li>'+article.title+'</li>'
-			+'</ul>'
+			var html = '<div class="title">'
+			+'<span>'
+			+article.title
+			+'</span>'
 			+'</div>'
 			+'<div class="info">'
-			+'<span class="date" style="color:#4a86e8">write by '+article.dateUpdated+'</span>'
+			+'<span class="date" style="color:#4a86e8">write by '+article.dateCreated+'</span>'
 			+'</div>'
-			+'<div class="blogCon">'+article.content+'</div>'
-			+'<div class="blogFoot">'
-			+'posted @'+article.author+'&nbsp;&nbsp;'+article.dateCreated+' 阅读('+article.countComment+') 评论('+article.countComment+')'
-			+'<a href="javascript:void(0);" onclick="update();">编辑</a>'
+			+'<div class="blogContent">'+article.content+'</div>'
+			+'<div class="blogFoot" style="color:#4a86e8">'
+			+'阅读('+article.countComment+') 评论('+article.countComment+')'
 			+'</div>';
 			console.log(html);
-			$('#blog').html(html);
+			$('#content').html(html);
 		},
 		error:function(xhr){
 			alert("123")
