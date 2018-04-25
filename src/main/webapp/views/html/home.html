@@ -1,21 +1,11 @@
 <html>
 <head>
-<title>homepage</title>
+<title>Homepage</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <link rel="stylesheet" href="../css/common/common.css" type="text/css" />
 <link rel="stylesheet" href="../css/common/nav.css" type="text/css" />
 <link rel="stylesheet" href="../static/css/font-awesome.min.css" type="text/css" />
 <style type="text/css">
-.blog{
-	margin:50px 150px 50px 150px;
-	width:90%;
-}
-.content{
-	width:80%;
-	margin:150px auto;
-	text-align:center;
-	vertical-align:middle;
-}
 </style>
 <script type="text/javascript" src="../js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
@@ -66,17 +56,15 @@ $(document).ready(function(){
 				var article = articles[i];
 				html+='<div class="blog">'
 					+'<div class="title">'
-					+'<ul>'
-					+'<li>'
+					+'<span>'
 					+'<a href="../html/note/noteDetail.html?id='+article.id+'">'+article.title+'</a>'
-					+'</li>'
-					+'</ul>'
+					+'</span>'
 					+'</div>'
 					+'<div class="info">'
 					+'<span class="date" style="color:#4a86e8">'+article.dateUpdated+'</span>'
 					+'</div>'
 					+'<div class="summary">'+article.content+'</div>'
-					+'<hr size="3" width="80%" color=#000>'
+					+'<hr size="1" width="80%" color=#000>'
 					+'</div>';
 			}
 			console.log(html);
