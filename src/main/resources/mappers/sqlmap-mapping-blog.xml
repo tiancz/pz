@@ -108,6 +108,12 @@
 	<select id="getArticleByID" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.ArticleDTO">
 		select * from blog_blog where id=#{id}
 	</select>
+	<select id="getPreByID" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.ArticleDTO">
+		select * from blog_blog where <![CDATA[ id<#{id} ]]> order by id desc limit 1
+	</select>
+	<select id="getNextByID" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.ArticleDTO">
+		select * from blog_blog where <![CDATA[ id>#{id} ]]> order by id asc limit 1
+	</select>
 	<insert id="addArticle" parameterType="com.tian.zone.dto.article.ArticleDTO">
 		insert into blog_blog(id,title,content,date_created,date_updated,author,category_id)
 		values

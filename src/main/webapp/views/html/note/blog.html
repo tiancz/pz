@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+	<meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>MySQL读写分离基于Mycat实现</title>
+    <meta name="HandheldFriendly" content="True">
+	<link rel="stylesheet" href="../../css/side1/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/side1/atom-one-light.css">
+	<link rel="stylesheet" href="../../css/side1/waves.min.css">
+	<link rel="stylesheet" href="../../css/side1/layout.css">
+	<link rel="stylesheet" href="../../css/side1/zoom.css">
+<script src="./MySQL读写分离基于Mycat实现_files/push.js"></script>
+<style media="screen">
+.post-page-header {
+	margin-bottom: 30px;
+    padding-top: 50px;
+	text-align: center
+}
+
+.post-page-header>h1 {
+	font-size: 28pt;
+	font-weight: 300;
+	margin-bottom: 10px
+}
+
+.post-page-header>time {
+	font-size: 10pt;
+	font-weight: 200;
+	color: #9eabb3
+}
+</style>
+</head>
+<body class="post-template">
+<div id="pjax-container">
+    	<nav class="page-nav">
+    <div class="page-nav-logo">
+        <img src="./MySQL读写分离基于Mycat实现_files/QQ-2.png" alt="">
+    </div>
+    <div class="page-nav-bar">
+        <ul>
+        <li><a href="http://raye.wang/">首页</a></li>
+        <li><a href="http://www.raye.wang/tag/android/">Android</a></li>
+        <li><a href="http://www.raye.wang/tag/java/">Java</a></li>
+        <li><a href="http://www.raye.wang/tag/fu-wu-qi/">服务器</a></li>
+        <li><a href="http://www.raye.wang/tags">标签云</a></li>
+        <li><a href="http://www.raye.wang/zuo-pin">作品</a></li>
+        <li><a href="http://www.raye.wang/guan-yu">关于</a></li>
+        <li><a href="http://www.raye.wang/zan-zhu-lie-biao">赞助列表</a></li>
+        </ul>
+    </div>
+    <div class="page-nav-icon">
+        <a href="https://github.com/RayeWang" class="fa fa-github page-nav-icon-bg">
+        </a><a href="mailto:admin@raye.wang" class="fa fa-envelope page-nav-icon-bg"></a>
+        <a href="http://localhost:2368/rss" class="fa fa-rss page-nav-icon-bg"></a>
+    </div>
+</nav>
+        <div class="page-main">
+<div class="mask"></div>
+
+<header class="post-page-header animated fadeInDown">
+    <h1 class="animated fadeIn">MySQL读写分离基于Mycat实现</h1>
+    <time datetime="2018-03-15">15 March 2018 9:28:24 am</time>
+</header>
+<div class="container">
+    <div class="container-main">
+        <article class="post-page-main">
+            <section class="post-page-content animated fadeInDown">
+                <h4 id="">为什么需要读写分离</h4>
+
+<p>至于为什么需要读写分离，在我之前的文章有介绍过了，相信看到这篇文章的人也知道为什么需要读写分离了，当然如果你也需要了解一下，那么欢迎查看我之前的文章<a href="http://raye.wang/2018/02/03/springboot-mybatis-du-xie-fen-chi-pei-zhi/" target="_blank" class="down-a">SpringBoot Mybatis 读写分离配置</a>,顺便也可以了解一下怎么通过代码进行读写分离的</p>
+
+<h4 id="mysql">MySQL主从复制</h4>
+
+<p>主从复制是读写分离的关键，不管通过什么方式进行读写分离，前提就是MySQL有主从复制，当前双机主从也行，但是关键的关键，是要能保证2个库的数据能一致（出掉刚写入主库从库还未能及时反应过来的情况），如果2个库的数据不一致，那么读写分离也有没有任何意义了，具体MySQL怎么做主从复制可以查看我之前的文章<a href="http://raye.wang/2017/04/14/mysqlzhu-cong-fu-zhi-da-jian-ji-yu-ri-zhi-binlog/" target="_blank" class="down-a">MySQL主从复制搭建，基于日志（binlog）</a></p>
+
+<h4 id="mycat">Mycat是什么</h4>
+
+<p>一个彻底开源的，面向企业应用开发的大数据库集群</p>
+
+<p>支持事务、ACID、可以替代MySQL的加强版数据库</p>
+
+<p>一个可以视为MySQL集群的企业级数据库，用来替代昂贵的Oracle集群</p>
+
+<p>一个融合内存缓存技术、NoSQL技术、HDFS大数据的新型SQL Server</p>
+
+<p>结合传统数据库和新型分布式数据仓库的新一代企业级数据库产品</p>
+
+<p>一个新颖的数据库中间件产品</p>
+
+<ol>
+<li><p>balance="0", 不开启读写分离机制，所有读操作都发送到当前可用的 writeHost 上。</p></li>
+<li><p>balance="1"，全部的 readHost 与 stand by writeHost 参与 select 语句的负载均衡，简单的说，当双主双从模式(M1-&gt;S1，M2-&gt;S2，并且 M1 与 M2 互为主备)，正常情况下，M2,S1,S2 都参与 select 语句的负载均衡。</p></li>
+<li><p>balance="2"，所有读操作都随机的在 writeHost、readhost 上分发。</p></li>
+<li><p>balance="3"，所有读请求随机的分发到 wiriterHost 对应的 readhost 执行，writerHost 不负担读压力</p></li>
+</ol>
+
+<p><code>writeType</code>写入负载均衡类型，目前的取值有 3 种：</p>
+
+<ol>
+<li><p>writeType="0", 所有写操作发送到配置的第一个 writeHost，第一个挂了切到还生存的第二个writeHost，重新启动后已切换后的为准，切换记录在配置文件中:dnindex.properties .</p></li>
+<li><p>writeType="1"，所有写操作都随机的发送到配置的 writeHost</p></li>
+</ol>
+
+<p><code>dbType</code> 指定后端连接的数据库类型，目前支持二进制的 mysql 协议，还有其他使用 JDBC 连接的数据库。例如：mongodb、oracle、spark 等</p>
+
+<p><code>dbDriver</code>指定连接后端数据库使用的 Driver，目前可选的值有 native 和 JDBC。使用 native 的话，因为这个值执行的
+是二进制的 mysql 协议，所以可以使用 mysql 和 maridb。其他类型的数据库则需要使用 JDBC 驱动来支持。从 1.6 版本开始支持 postgresql 的 native 原始协议。
+如果使用 JDBC 的话需要将符合 JDBC 4 标准的驱动 JAR 包放到 MYCAT\lib 目录下，并检查驱动 JAR 包中包括如下目录结构的文件：META-INF\services\java.sql.Driver。在这个文件内写上具体的 Driver 类名，例如：
+com.mysql.jdbc.Driver。</p>
+
+<p><code>heartbeat</code>这个标签内指明用于和后端数据库进行心跳检查的语句。例如,MYSQL 可以使用 select user()，Oracle 可以使用 select 1 from dual 等。
+这个标签还有一个 connectionInitSql 属性，主要是当使用 Oracla 数据库时，需要执行的初始化 SQL 语句就这个放到这里面来。例如：alter session set nls<em>date</em>format='yyyy-mm-dd hh24:mi:ss'</p>
+
+<p><code>writeHost</code>，<code>readHost</code>这两个标签都指定后端数据库的相关配置给 mycat，用于实例化后端连接池。唯一不同的是，writeHost 指定写实例、readHost 指定读实例，组着这些读写实例来满足系统的要求。
+在一个 dataHost 内可以定义多个 writeHost 和 readHost。但是，如果 writeHost 指定的后端数据库宕机，那么这个 writeHost 绑定的所有 readHost 都将不可用。另一方面，由于这个 writeHost 宕机系统会自动的检测到，并切换到备用的 writeHost 上去,这2个标签属性都一致，拥有<code>host</code>,<code>url</code>,<code>password</code>,<code>user</code>,<code>weight</code>,<code>usingDecrypt</code>等属性</p>
+
+<p><code>host</code>用于标识不同实例，一般 writeHost 我们使用<em>M1，readHost 我们用</em>S1</p>
+
+<p><code>url</code>真实数据库的实例的链接地址，如果是使用 native 的 dbDriver，则一般为 address:port 这种形式。用 JDBC 或其他的dbDriver，则需要特殊指定。当使用 JDBC 时则可以这么写：jdbc:mysql://localhost:3306/</p>
+
+<p><code>user</code>真实数据库实例的链接用户名</p>
+
+<p><code>password</code>真实数据库实例的链接密码</p>
+
+<p><code>weight</code>权重 配置在 readhost 中作为读节点的权重,主要用于多台读取的数据库实例机器配置不同的情况，可以根据权重调整访问量</p>
+
+<p><code>usingDecrypt</code>是否对密码加密默认 0 否 如需要开启配置 1，同时使用加密程序对密码加密</p>
+
+<p><mark style="background: none;">注意，readHost是在writeHost标签内的，不是单独的</mark></p>
+
+<p>前面已经差不多都解释清楚了，因为我只是用的基本的主从复制，所以我的将<code>dataHost</code>的<code>balance</code>设置成了3</p>
+
+<p>启动mycat，然后用数据库连接工具连接到mycat，可以测试是否配置成功，最简单的就是通过修改从库的数据，这样方便查看到底是运行到哪个库上面了，另外由于我是基于docker启动的mycat，所以如果是直接在系统中运行的mycat的，可以去看官方文档，看看到底怎么启动mycat</p>
+            </section>
+            <footer class="animated fadeInDown">
+                <div class="post-page-tags">
+                    标签：<a href="http://raye.wang/tag/du-xie-fen-chi/">读写分离</a>, <a href="http://raye.wang/tag/mycat/">Mycat</a>, <a href="http://raye.wang/tag/java/">Java</a>
+                </div>
+                <div class="post-page-readmore">
+                    <div class="post-page-readmore-prev">
+                        <span>下一篇:&nbsp;&nbsp;</span>
+                        <a href="http://raye.wang/2018/05/19/rabbitmqyan-chi-dui-lie-shi-xian-ding-shi-ren-wu/" class="down-a">Rabbitmq延迟队列实现定时任务</a>
+                    </div>
+                    <div class="post-page-readmore-next">
+                        <span>上一篇:&nbsp;&nbsp;</span>
+                        <a href="http://raye.wang/2018/02/03/springboot-mybatis-du-xie-fen-chi-pei-zhi/" class="down-a">SpringBoot Mybatis 读写分离配置</a>
+                    </div>
+                </div>
+            </footer>
+       </article>
+
+    </div>
+</div>
+
+<footer class="page-footer">
+<p>Copyright © 2018 <a class="down-a" href="http://localhost:2368/">Raye Blog</a></p>
+
+</footer>
+</div>
+
+    <span class="page-menu-btn waves-effect waves-button waves-float animated2 fadeIn" style="background-color: rgb(255, 255, 255);">
+			<i class="page-menu-btn-one"></i>
+			<i class="page-menu-btn-two"></i>
+			<i class="page-menu-btn-three"></i>
+    </span>
+    <span class="page-retop-btn waves-effect waves-button waves-float animated2 fadeIn"><i class="fa fa-angle-up"></i></span>
+    <span class="page-body-color-light animated2 fadeIn" style="display: inline-block;"><i class="fa fa-sun-o"></i></span>
+    <span class="page-body-color-night animated2 fadeIn" style="display: none;"><i class="fa fa-moon-o"></i></span>
+</div>
+    <script src="../../js/jquery/jquery-2.1.4.min.js"></script>
+    <script src="../../js/side1/jquery.pjax.js"></script>
+    <script src="../../js/side1/highlight.pack.js"></script>
+	<script src="../../js/side1/waves.min.js"></script>
+	<script src="../../js/side1/transition.js"></script>
+    <script src="../../js/side1/main.js"></script>
+	<script src="../../js/side1/zoom.js"></script>
+    <script type="text/javascript">
+        window.onload = function(){
+            $('#pjax-load-container').hide();
+        };
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            hljs.initHighlightingOnLoad();
+            Waves.displayEffect();
+			OtherF();
+        })
+    </script>
+    <script type="text/javascript">
+        $(document).pjax('a', '#pjax-container', {fragment:'#pjax-container', timeout:8000});
+            $(document).on('pjax:send', function() {
+                $('#pjax-load-container').show();
+            });
+            $(document).on('pjax:complete', function() {
+               $('#pjax-load-container').hide();
+                $('pre code').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                });
+				OtherF();
+            });
+    </script>
+</body></html>

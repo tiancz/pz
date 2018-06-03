@@ -20,6 +20,8 @@ public interface ArticleService {
 	public Map<String,List<ArticleDTO>> getAllArticle(JSONObject req);
 	
 	public ArticleDTO getArticleDetail(String id);
+	public ArticleDTO next(String id);
+	public ArticleDTO pre(String id);
 	
 	public ArticleDTO insertArticle(ArticleDTO article);
 }

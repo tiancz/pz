@@ -99,6 +99,16 @@ public class ArticleServiceImpl implements ArticleService {
 		return article;
 	}
 	@Override
+	public ArticleDTO next(String id) {
+		ArticleDTO article = articleDao.getArticleById("getNextByID", id);
+		return article;
+	}
+	@Override
+	public ArticleDTO pre(String id) {
+		ArticleDTO article = articleDao.getArticleById("getPreByID", id);
+		return article;
+	}
+	@Override
 	public ArticleDTO insertArticle(ArticleDTO article) {
 
 		article.setId(System.currentTimeMillis()+"");

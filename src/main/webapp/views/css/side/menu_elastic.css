@@ -128,7 +128,7 @@ body,
 
 .menu {
 	background: #373a47;
-	width: calc(100% - 120px);
+	width: calc(100% - 20px);
 	height: 100%;
 	padding: 2em 1em;
 }
@@ -157,7 +157,7 @@ body,
 /* Morph Shape */
 .morph-shape {
 	position: absolute;
-	width: 120px;
+	width: 20px;
 	height: 100%;
 	top: 0;
 	right: 0;

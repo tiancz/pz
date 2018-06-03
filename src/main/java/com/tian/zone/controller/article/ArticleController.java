@@ -48,7 +48,11 @@ public class ArticleController {
 		LOGGER.info("article id:"+req.getParameter("id"));
 		JSONObject resp = new JSONObject();
 		ArticleDTO article = articleService.getArticleDetail(req.getParameter("id"));
+		ArticleDTO pre = articleService.next(req.getParameter("id"));
+		ArticleDTO next = articleService.pre(req.getParameter("id"));
 		resp.put("article", article);
+		resp.put("pre", pre);
+		resp.put("next", next);
 		LOGGER.info("resp:"+JSONObject.toJSONString(resp));
 		return resp;
 	}

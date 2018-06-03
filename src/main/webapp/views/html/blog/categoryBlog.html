@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>Category Blog</title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<link rel="stylesheet" href="../../css/common/common.css" type="text/css" />
+<link rel="stylesheet" href="/pz/views/css/common/nav.css" type="text/css" />
+<script type="text/javascript" src="/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" href="/pz/views/static/css/font-awesome.min.css" type="text/css" />
+<style type="text/css">
+
+</style>
+<script>
+$(document).ready(function(){
+	var data = {
+		type:"category"
+	};
+	var JsonData = JSON.stringify(data);
+	$.ajax({
+		url:'http://localhost:8080/pz/article/articleList.do',
+		type:'POST',
+		dataType:'json',
+		contentType:'application/json',
+		data:JsonData,
+		async:false,
+		success:function(data){
+			var html = '';
+			var categorys = data.articles;
+			for(category in categorys){
+				console.log(JSON.stringify(category));
+				var blogs = categorys[category];
+				html += '<div class="category">'
+					+'<h1>'
+					+category
+					+'</h1>'
+					+'</div>';
+				for(blog in blogs){
+					var article = blogs[blog];
+					html += '<div class="blog">'
+						+'<div class="title">'
+						+'<span>'
+						+'<a href="noteDetail.html?id='+article.id+'" style="font-size:26px;">'+article.title+'</a>'
+						+'</span>'
+						+'</div>'
+						+'<div class="info">'
+						+'<span class="date" style="color:#4a86e8;">write by '+article.dateCreated+'</span>'
+						+'</div>'
+						+'<div class="blogContent">'+article.content+'</div>'
+						+'<div class="blogFoot" style="color:#4a86e8">'
+						+'阅读('+article.countComment+') 评论('+article.countComment+')'
+						+'</div>'
+						+'</div>';
+				}
+			}
+			console.log(JSON.stringify(html));
+			$('#content').html(html);
+		},
+		error:function(xhr){
+			alert("查询出错")
+		}
+	});
+});
+</script>
+</head>
+<body>
+<div class="nav">
+	<div class="menu">
+		<ul>
+			<li><a href="../home.html"><i class="fa fa-home fa-fw"></i>首页</a></li>
+			<li><a href="../note/archiveBlog.html"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+			<li><a href="../note/categoryBlog.html"><i class="fa fa-th fa-fw"></i>分类</a></li>
+			<li><a href="../note/tagBlog.html"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+			<li><a href="../about.html"><i class="fa fa-user fa-fw"></i>关于</a></li>
+		</ul>
+	</div>
+</div>
+<div class="wrapper">
+	<div class="content" id="content">
+	</div>
+</div>
+</body>
+</html>

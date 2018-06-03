@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+	<meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Blog</title>
+    <meta name="HandheldFriendly" content="True">
+	<link rel="stylesheet" href="../../static/css/font-awesome.min.css" type="text/css"/>
+    <link rel="stylesheet" href="../../css/side1/atom-one-light.css">
+	<link rel="stylesheet" href="../../css/side1/waves.min.css">
+	<link rel="stylesheet" href="../../css/side1/layout.css">
+	<link rel="stylesheet" href="../../css/side1/zoom.css">
+<style media="screen">
+.post-page-header {
+	margin-bottom: 30px;
+    padding-top: 50px;
+	text-align: center
+}
+
+.post-page-header>h1 {
+	font-size: 28pt;
+	font-weight: 300;
+	margin-bottom: 10px
+}
+
+.post-page-header>time {
+	font-size: 10pt;
+	font-weight: 200;
+	color: #9eabb3
+}
+</style>
+</head>
+<body class="post-template">
+<div id="pjax-container">
+   	<nav class="page-nav">
+	    <div class="page-nav-logo">
+	        <img src="../../static/icon/star.jpeg" alt="">
+	    </div>
+	    <div class="page-nav-bar">
+	        <ul>
+				<li><a href="../index.html"><i class="fa fa-home fa-fw"></i>首页</a></li>
+				<li><a href="../blog/archiveBlog.html"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+				<li><a href="../blog/categoryBlog.html"><i class="fa fa-th fa-fw"></i>分类</a></li>
+				<li><a href="../blog/tagBlog.html"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+				<li><a href="../about.html"><i class="fa fa-user fa-fw"></i>关于</a></li>
+	        </ul>
+	    </div>
+	    <div class="page-nav-icon">
+	        <a href="https://github.com/tiancz" class="fa fa-github page-nav-icon-bg">
+	        </a><a href="mailto:nathanieltian@163.com" class="fa fa-envelope page-nav-icon-bg"></a>
+	    </div>
+	</nav>
+	<div class="page-main">
+	<div class="mask"></div>
+	
+	<header class="post-page-header animated fadeInDown">
+	    <h1 class="title" id="title"></h1>
+	    <time class="datetime" id="datetime"></time>
+	</header>
+	<div class="container">
+	    <div class="container-main">
+	        <article class="post-page-main">
+	            <section class="post-page-content animated fadeInDown">
+	            	<div class="content" id="content"></div>
+	            </section>
+	            <footer class="animated fadeInDown">
+	                <div class="post-page-tags">
+	                   	 标签：<a href="#">读写分离</a>, <a href="#">Java</a>
+	                </div>
+	                <div class="post-page-readmore">
+	                    <div class="post-page-readmore-prev" id="next">
+	                    </div>
+	                    <div class="post-page-readmore-next" id="pre">
+	                    </div>
+	                </div>
+	            </footer>
+	       </article>
+	    </div>
+	</div>
+	
+	<footer class="page-footer">
+		<i class="fa fa-copyright fa-fw"></i>2017
+		<i class="fa fa-heart fa-fw"></i>Tian Chaozhe
+	</footer>
+	</div>
+
+    <span class="page-menu-btn waves-effect waves-button waves-float animated2 fadeIn">
+		<i class="page-menu-btn-one"></i>
+		<i class="page-menu-btn-two"></i>
+		<i class="page-menu-btn-three"></i>
+    </span>
+    <span class="page-retop-btn waves-effect waves-button waves-float animated2 fadeIn"><i class="fa fa-angle-up"></i></span>
+    <span class="page-body-color-light animated2 fadeIn" style="display: inline-block;"><i class="fa fa-sun-o"></i></span>
+    <span class="page-body-color-night animated2 fadeIn" style="display: none;"><i class="fa fa-moon-o"></i></span>
+</div>
+<script src="../../js/jquery/jquery-2.1.4.min.js"></script>
+<script src="../../js/side1/jquery.pjax.js"></script>
+<script src="../../js/side1/highlight.pack.js"></script>
+<script src="../../js/side1/waves.min.js"></script>
+<script src="../../js/side1/transition.js"></script>
+<script src="../../js/side1/main.js"></script>
+<script src="../../js/side1/zoom.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		var url=location.search;
+		if(url.indexOf("?")!=-1){
+			var str = url.substr(1);
+			strs = str.split("&");
+		}
+		var data = '';
+		var JsonData = JSON.stringify(data);
+		$.ajax({
+			url:'http://localhost:8080/pz/article/articleDetial.do?id='+strs[0].split("=")[1],
+			type:'POST',
+			dataType:'json',
+			contentType:'application/json',
+			data:JsonData,
+			async:true,
+			success:function(data){
+				console.log(JSON.stringify(data));
+				var article = data.article;
+				var pre = data.pre;
+				var next = data.next;
+				var title = article.title;
+				$('#title').html(title);
+				var datetime = article.dateCreated;
+				$('#datetime').html(datetime);
+				var content = '<div class="blogContent">'+article.content+'</div>'
+				$('#content').html(content);
+				var preText = '<span>下一篇:&nbsp;&nbsp;</span>'
+					+'<a href="blog.html?id='+pre.id+'" class="down-a">'
+					+pre.title
+					+'</a>';
+				$('#pre').html(preText);
+				var nextText = '<span>上一篇:&nbsp;&nbsp;</span>'
+					+'<a href="blog.html?id='+next.id+'" class="down-a">'
+					+next.title
+					+'</a>';
+				$('#next').html(nextText);
+			},
+			error:function(xhr){
+				alert("123")
+			}
+		});
+	});
+</script>
+   <script type="text/javascript">
+       window.onload = function(){
+           $('#pjax-load-container').hide();
+       };
+   </script>
+   <script type="text/javascript">
+       $(function(){
+           hljs.initHighlightingOnLoad();
+           Waves.displayEffect();
+		OtherF();
+       })
+   </script>
+   <script type="text/javascript">
+       $(document).pjax('a', '#pjax-container', {fragment:'#pjax-container', timeout:8000});
+           $(document).on('pjax:send', function() {
+               $('#pjax-load-container').show();
+           });
+           $(document).on('pjax:complete', function() {
+              $('#pjax-load-container').hide();
+               $('pre code').each(function(i, block) {
+                   hljs.highlightBlock(block);
+               });
+			OtherF();
+           });
+   </script>
+</body>
+</html>
