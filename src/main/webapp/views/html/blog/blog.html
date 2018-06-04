@@ -127,15 +127,24 @@
 				$('#datetime').html(datetime);
 				var content = '<div class="blogContent">'+article.content+'</div>'
 				$('#content').html(content);
-				var preText = '<span>下一篇:&nbsp;&nbsp;</span>'
-					+'<a href="blog.html?id='+pre.id+'" class="down-a">'
-					+pre.title
-					+'</a>';
+				if(pre==null){
+					var preText = '<span>下一篇:&nbsp;&nbsp;</span>'
+						+"已经没有啦";
+				}else{
+					var preText = '<span>下一篇:&nbsp;&nbsp;</span>'
+						+'<a href="blog.html?id='+pre.id+'" class="down-a">'
+						+pre.title
+						+'</a>';
+				}
 				$('#pre').html(preText);
-				var nextText = '<span>上一篇:&nbsp;&nbsp;</span>'
-					+'<a href="blog.html?id='+next.id+'" class="down-a">'
-					+next.title
-					+'</a>';
+				if(next==null){
+					var nextText = '';
+				}else{
+					var nextText = '<span>上一篇:&nbsp;&nbsp;</span>'
+						+'<a href="blog.html?id='+next.id+'" class="down-a">'
+						+next.title
+						+'</a>';
+				}
 				$('#next').html(nextText);
 			},
 			error:function(xhr){
