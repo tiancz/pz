@@ -11,4 +11,5 @@ import com.alibaba.fastjson.JSONObject;
  **/
 public interface TagService {
 	public JSONObject tagList(JSONObject obj);
+	public JSONObject addTag(JSONObject obj);
 }

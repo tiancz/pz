@@ -17,9 +17,6 @@
 		values
 		(#{id},#{name},#{date})
 	</insert>
-	<select id="getTags" resultType="com.tian.zone.dto.article.TagDTO">
-		select * from blog_tag
-	</select>
 	<select id="getTagIdByTagsName" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.TagDTO">
 		select a.tag_id from coffee_blog_tag a where a.tag_name in (${_parameter})
 	</select>

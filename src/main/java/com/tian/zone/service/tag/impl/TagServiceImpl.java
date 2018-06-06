@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tian.zone.dao.tag.TagDAO;
+import com.tian.zone.dto.article.TagDTO;
 import com.tian.zone.service.tag.TagService;
 
 /**
@@ -19,12 +20,20 @@ import com.tian.zone.service.tag.TagService;
 @Service
 public class TagServiceImpl implements TagService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(TagServiceImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(TagServiceImpl.class);
 	@Autowired
 	private TagDAO tagDAO;
 	@Override
 	public JSONObject tagList(JSONObject obj) {
 		return tagDAO.tagList(obj);
+	}
+	@Override
+	public JSONObject addTag(JSONObject obj) {
+		log.info("请求："+JSONObject.toJSONString(obj));
+		TagDTO tag = new TagDTO();
+		tag = JSONObject.toJavaObject(obj, TagDTO.class);
+		tagDAO.addTag("createTag", tag);
+		return JSONObject.parseObject(JSONObject.toJSONString(tag));
 	}
 
 }

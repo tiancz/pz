@@ -65,10 +65,12 @@ public class ArticleController {
 		String title = req.getString("title");
         String content = req.getString("note");
         String categoryId = req.getString("categoryId");
+        String tag = req.getString("tagId");
 		ArticleDTO article = new ArticleDTO();
         article.setTitle(title);
 		article.setContent(content);
 		article.setCategoryId(categoryId);
+		article.setTag(tag);
 		articleService.insertArticle(article);
 		resp.put("article", article);
 		return resp;

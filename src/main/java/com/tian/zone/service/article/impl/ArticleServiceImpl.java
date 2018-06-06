@@ -1,6 +1,5 @@
 package com.tian.zone.service.article.impl;
 
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,7 +15,10 @@ import org.springframework.util.ObjectUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tian.zone.dao.article.ArticleDAO;
+import com.tian.zone.dao.tag.TagDAO;
 import com.tian.zone.dto.article.ArticleDTO;
+import com.tian.zone.dto.article.TagBlogDTO;
+import com.tian.zone.dto.article.TagDTO;
 import com.tian.zone.service.article.ArticleService;
 
 /**
@@ -29,10 +31,12 @@ import com.tian.zone.service.article.ArticleService;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ArticleServiceImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(ArticleServiceImpl.class);
 	
 	@Autowired
 	private ArticleDAO articleDao;
+	@Autowired
+	private TagDAO tagDAO;
 	@Override
 	public List<ArticleDTO> getAllArticle() {
 		List<ArticleDTO> articles = articleDao.getAllArticle();
@@ -43,9 +47,9 @@ public class ArticleServiceImpl implements ArticleService {
 	public Map<String, List<ArticleDTO>> getAllArticle(JSONObject req) {
 		Map<String, List<ArticleDTO>> result = new HashMap<>();
 		List<ArticleDTO> articles = articleDao.getAllArticle();
-		LOGGER.info("articles:"+JSONObject.toJSONString(articles));
+		log.info("articles:"+JSONObject.toJSONString(articles));
 		String type = req.getString("type");
-		LOGGER.info("type:"+type);
+		log.info("type:"+type);
 		for (ArticleDTO articleDTO : articles) {
 			if("time".equals(type)){
 				String time = articleDTO.getDateCreated();
@@ -93,9 +97,38 @@ public class ArticleServiceImpl implements ArticleService {
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public ArticleDTO getArticleDetail(String id) {
 		ArticleDTO article = articleDao.getArticleById("getArticleByID", id);
+		JSONObject req = new JSONObject();
+		req.put("blogId", id);
+		JSONObject tagJobjs = tagDAO.getTagsByBlogId(req);
+		List<TagBlogDTO> tagBlogList = (List<TagBlogDTO>)tagJobjs.get("dataList");
+		List<Integer> ids = new ArrayList<>();
+		for (int i = 0; i < tagBlogList.size(); i++) {
+			TagBlogDTO tagBlogDTO = tagBlogList.get(i);
+			ids.add(Integer.valueOf(tagBlogDTO.getTagId()));
+		}
+		log.info("tag's id:"+JSONObject.toJSONString(ids));
+
+		JSONObject reqTags = new JSONObject();
+		reqTags.put("ids", ids);
+		JSONObject tagObjs = tagDAO.tagList(reqTags);
+		List<TagDTO> tagList = (List<TagDTO>)tagObjs.get("dataList");
+		log.info("tags is :"+JSONObject.toJSONString(tagList));
+		String tagStr = "";
+		for (int i = 0; i < tagList.size(); i++) {
+			if(i==0){
+				TagDTO tagDTO = tagList.get(i);
+				tagStr += tagDTO.getName();
+			}else{
+				TagDTO tagDTO = tagList.get(i);
+				tagStr += ",";
+				tagStr += tagDTO.getName();
+			}
+		}
+		article.setTag(tagStr);
 		return article;
 	}
 	@Override
@@ -110,54 +143,30 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 	@Override
 	public ArticleDTO insertArticle(ArticleDTO article) {
-
-		article.setId(System.currentTimeMillis()+"");
+		article.setId(String.valueOf(System.currentTimeMillis()));
 		article.setAuthor("nathanieltian");
 //		yyyy-MM-dd HH:mm:ss
-		article.setDateCreated(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-		article.setDateUpdated(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
-		/*String tags = article.getTag();
-		if(tags.split(",").length==1){
-			tags = "'"+tags+"'";
-		}else{
-			tags = "'"+tags+"'";
-			tags = tags.replace(",", "','");
-		}
-		article.setTag(tags);*/
-		/*
-		List<TagDTO> tagIds = categoryService.getTagIdByName("getTagIdByTagsName", article.getTag());
-		String tagId = "";
-		for (TagDTO tagDTO : tagIds) {
-			tagId += tagDTO.getTagId();
-		}
-		for(int i=0;i<tagIds.size();i++){
-			if(tagIds.size()==1){
-				tagId = tagIds.get(0).getTagId();
-			}else if(i==0){
-				tagId = tagIds.get(0).getTagId();
-			}else{
-				tagId = tagId+","+tagIds.get(i).getTagId();
+		article.setDateCreated(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		article.setDateUpdated(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		String tags = article.getTag();
+		String tagArr[] = tags.split(";");
+		for (int i = 0; i < tagArr.length; i++) {
+			String tag = tagArr[i];
+			if(!ObjectUtils.isEmpty(tag)){
+				TagBlogDTO tbDto = new TagBlogDTO();
+				tbDto.setTagId(tag);
+				tbDto.setBlogId(article.getId());
+				tagDAO.addTagBlog("createBlogTag",tbDto);
+				log.info("insert a tag and blog");
 			}
 		}
-		article.setTagId(tagId);
-		*/
 		int result = 0;
 		result = articleDao.insertArticle("addArticle",article);
 		if(result==0){
-			LOGGER.info("insertArticle failure");
+			log.info("insertArticle failure");
 		}else{
-			LOGGER.info("insert a Article");
+			log.info("insert a Article");
 		}
 		return article;
-	}
-	public String getMethod(String str) {
-		return "get"+str.substring(0,1).toUpperCase()+str.substring(1, str.length());
-	}
-	public static void main(String[] args) throws Exception {
-		ArticleDTO article = new ArticleDTO();
-		article.setCategory("12");
-		Method getCategory = article.getClass().getMethod("getCategory");
-		String str = (String)getCategory.invoke(article.getClass().newInstance(), null);
-		System.out.println(str);
 	}
 }

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,7 +22,7 @@ import com.tian.zone.service.tag.TagService;
 @Controller
 @RequestMapping("/tag")
 public class TagController {
-	private static final Logger LOGGER = LoggerFactory.getLogger(TagController.class);
+	private static final Logger log = LoggerFactory.getLogger(TagController.class);
 	@Autowired
 	private TagService tagService;
 	
@@ -29,6 +30,14 @@ public class TagController {
 	public @ResponseBody JSONObject tagList(){
 		JSONObject resp = new JSONObject();
 		resp = tagService.tagList(new JSONObject());
+		return resp;
+	}
+
+	@RequestMapping(value="/addTag.do",method=RequestMethod.POST)
+	public @ResponseBody JSONObject addTag(@RequestBody JSONObject req){
+		JSONObject resp = new JSONObject();
+		log.info("前端请求："+JSONObject.toJSONString(req));
+		resp = tagService.addTag(req);
 		return resp;
 	}
 }

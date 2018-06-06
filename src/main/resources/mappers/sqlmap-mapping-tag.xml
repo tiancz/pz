@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tian.zone.dao.category.CategoryDAO">
+	<insert id="createTag" parameterType="com.tian.zone.dto.article.TagDTO">
+		insert into blog_tag(name)
+		values
+		(#{name})
+	</insert>
+	<select id="getTags" resultType="com.tian.zone.dto.article.TagDTO">
+		select * from blog_tag
+	</select>
+	<select id="getTagsById" parameterType="java.util.List" resultType="com.tian.zone.dto.article.TagDTO">
+		select * from blog_tag b where b.id in 
+		<foreach item="id" index="index" collection="list" open="(" separator="," close=")">  
+			#{id}  
+		</foreach> 
+	</select>
+	<select id="getTagsByBlogId" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.TagBlogDTO">
+		select * from blog_tags b where b.blog_id = (#{blogId})
+	</select>
+	<insert id="createBlogTag" parameterType="com.tian.zone.dto.article.TagBlogDTO">
+		insert into blog_tags(tag_id,blog_id)
+		values
+		(#{tagId},#{blogId})
+	</insert>
+</mapper>

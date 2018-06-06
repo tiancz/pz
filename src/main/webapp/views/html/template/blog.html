@@ -38,9 +38,9 @@
 	    <div class="page-nav-bar">
 	        <ul>
 				<li><a href="../index.html"><i class="fa fa-home fa-fw"></i>首页</a></li>
-				<li><a href="../blog/archiveBlog.html"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-				<li><a href="../blog/categoryBlog.html"><i class="fa fa-th fa-fw"></i>分类</a></li>
-				<li><a href="../blog/tagBlog.html"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+				<li><a href="../template/archiveBlog.html"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+				<li><a href="../template/categoryBlog.html"><i class="fa fa-th fa-fw"></i>分类</a></li>
+				<li><a href="../template/tagBlog.html"><i class="fa fa-tags fa-fw"></i>标签</a></li>
 				<li><a href="../about.html"><i class="fa fa-user fa-fw"></i>关于</a></li>
 	        </ul>
 	    </div>
@@ -64,7 +64,7 @@
 	            </section>
 	            <footer class="animated fadeInDown">
 	                <div class="post-page-tags">
-	                   	 标签：<a href="#">读写分离</a>, <a href="#">Java</a>
+	                   	 标签：<label id="tag"></label>
 	                </div>
 	                <div class="post-page-readmore">
 	                    <div class="post-page-readmore-prev" id="next">
@@ -145,6 +145,20 @@
 						+'</a>';
 				}
 				$('#next').html(nextText);
+
+				var tagStr = article.tag;
+				var tags = tagStr.split(',');
+				var tagText = '';
+				for (var i=0;i<tags.length;i++){
+					if(i==0){
+						tagText += '<a href="#">'+tags[i]+'</a>';
+					}else{
+						tagText += ','
+						+'<a href="#">'+tags[i]+'</a>';
+					}
+					
+				}
+				$('#tag').html(tagText);
 			},
 			error:function(xhr){
 				alert("123")
