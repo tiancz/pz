@@ -3,7 +3,6 @@
 <title>Blog Programming</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <link rel="stylesheet" href="http://localhost:8080/pz/views/css/common/common.css" type="text/css" />
-<link rel="stylesheet" href="http://localhost:8080/pz/views/css/common/nav.css" type="text/css" />
 <link rel="stylesheet" href="http://localhost:8080/pz/views/static/css/font-awesome.min.css" type="text/css" />
 <style type="text/css">
 span{
@@ -20,23 +19,8 @@ span{
 }
 </style>
 <script type="text/javascript" src="http://localhost:8080/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="http://localhost:8080/pz/views/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="http://localhost:8080/pz/views/ckeditor/config.js"></script>
-<script type="text/javascript" src="http://localhost:8080/pz/views/ckfinder/ckfinder.js"></script>
 </head>
 <body>
-<div class="nav">
-	<div class="menu">
-		<ul>
-			<li><a href="/zone/home/home"><i class="fa fa-home fa-fw"></i>首页</a></li>
-			<li><a href="/zone/note/archive"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-			<li><a href="/zone/note/category"><i class="fa fa-th fa-fw"></i>分类</a></li>
-			<li><a href="/zone/note/tag"><i class="fa fa-tags fa-fw"></i>标签</a></li>
-			<li><a href="/zone/about"><i class="fa fa-user fa-fw"></i>关于</a></li>
-		</ul>
-	</div>
-</div>
-
 <div class="wrapper">
 	<div class="content">
 		<div class="operate" id="operate">
@@ -80,32 +64,6 @@ span{
 			error:function(xhr){
 				alert("123")
 			}
-		});
-		$('#coffee').click(function(){
-			if(this.style=='none'){
-				this.style.backgroundColor='#ccc';
-			}else{
-				this.style='none';
-				//this.style.backgroundColor='white';
-			}
-		});
-		$('#textContent #submit').click(function(){
-			var data = {
-					'note':editor.getData()
-			}
-			var JsonData = JSON.stringify(data);
-			$.ajax({
-				url:'http://localhost:8080/pz/article/addArticle.do',
-				type:'POST',
-				dataType:'json',
-				contentType:'application/json',
-				data:JsonData,
-				async:false,
-				success:function(data){
-					var id = data.article.id;
-					window.location.href ="http://localhost:8080/pz/views/jsp/note/noteDetail.html?id="+id;
-				}
-			});
 		});
 	});
 </script>
