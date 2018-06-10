@@ -113,9 +113,12 @@ public class ArticleServiceImpl implements ArticleService {
 		log.info("tag's id:"+JSONObject.toJSONString(ids));
 
 		JSONObject reqTags = new JSONObject();
-		reqTags.put("ids", ids);
-		JSONObject tagObjs = tagDAO.tagList(reqTags);
-		List<TagDTO> tagList = (List<TagDTO>)tagObjs.get("dataList");
+		List<TagDTO> tagList = new ArrayList<>();
+		if(!ObjectUtils.isEmpty(ids)){
+			reqTags.put("ids", ids);
+			JSONObject tagObjs = tagDAO.tagList(reqTags);
+			tagList = (List<TagDTO>)tagObjs.get("dataList");
+		}
 		log.info("tags is :"+JSONObject.toJSONString(tagList));
 		String tagStr = "";
 		for (int i = 0; i < tagList.size(); i++) {

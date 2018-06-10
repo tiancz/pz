@@ -47,6 +47,7 @@ public class TagDAOImpl extends BaseDAO implements TagDAO {
 	}
 	public JSONObject getTagsByBlogId(JSONObject obj){
 		JSONObject result = new JSONObject();
+		log.info("getTagsByBlogId tag'req:"+JSONObject.toJSONString(obj));
 		String blogId = obj.getString("blogId");
 		List<TagBlogDTO> list = CDUtil().selectList("getTagsByBlogId",blogId);
 		result.put("dataList", list);

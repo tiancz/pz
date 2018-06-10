@@ -2,8 +2,8 @@
 <head>
 <title>Blog Programming</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<link rel="stylesheet" href="http://localhost:8080/pz/views/css/common/common.css" type="text/css" />
-<link rel="stylesheet" href="http://localhost:8080/pz/views/static/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="/pz/views/css/common/common.css" type="text/css" />
+<link rel="stylesheet" href="/pz/views/static/css/font-awesome.min.css" type="text/css" />
 <style type="text/css">
 span{
 	margin:2px 2px;
@@ -17,20 +17,109 @@ span{
 	margin:2px 2px;
 	font-size:15px;
 }
+
+.box{
+	position: absolute;
+	width: 250px;
+	left: 50%;
+	height: auto;
+	z-index: 100;
+	background-color: #fff;
+	border: 1px solid rgb(0,153,153);
+	/*padding: 1px;*/
+}
+.box div.title{
+	height: 35px;
+	font-size: 16px;
+	background-color: #099;
+	position: relative;
+	padding-left: 10px;
+	line-height: 35px;
+	color: #fff;
+}
+.box div.end{
+	min-height:30px;
+	padding: 5px;
+}
+#bg{
+	background-color: #666;
+	position: absolute;
+	z-index: 99;
+	left: 0;
+	top: 0;
+	display: none;
+	width: 100%;
+	height: 100%;
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+	-moz-opacity: 0.5;
+}
 </style>
-<script type="text/javascript" src="http://localhost:8080/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+function modify(msg,action,type) {
+	$("#bg").css({
+		display: "block",
+		height: "100%",
+		position: "fixed"
+	});
+	var $box = $('.box');
+	$box.css({
+		//设置弹出层距离左边的位置
+		left: ($("body").width() - $box.width()) / 2 + "px",
+		//设置弹出层距离上面的位置
+		top: ($(window).height() - $box.height()) / 2 - $(window).scrollTop() - $box.height() + "px",
+		display: "block"
+	}).find("#title").html(msg);
+}
+function confirm(){
+	$("#bg").css('display', 'none');
+	$('.box').css('display', 'none');
+}
+function cancle(){
+	$("#bg").css('display', 'none');
+	$('.box').css('display', 'none');
+}
+</script>
+<script type="text/javascript" src="/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="/pz/views/dialog/dialog.js"></script>
 </head>
 <body>
 <div class="wrapper">
 	<div class="content">
-		<div class="operate" id="operate">
-			<ul>
-				<li><span>新增</span></li>
-				<li><span>修改</span></li>
-				<li><span>删除</span></li>
-			</ul>
+		<div id="category">
+			<div class="operate" id="operate">
+				<ul>
+					<li onclick="modify('新增category','add','category')"><span>新增</span></li>
+					<li onclick="modify('修改category','update','category')"><span>修改</span></li>
+					<li onclick="modify('删除category','delete','category')"><span>删除</span></li>
+				</ul>
+			</div>
+			<div class="categoryId" id="categoryId">
+			</div>
 		</div>
-		<div class="categoryId" id="categoryId">
+		<div id="tag">
+			<div class="operate" id="operate">
+				<ul>
+					<li onclick="modify('新增tag','add','tag')"><span>新增</span></li>
+					<li onclick="modify('修改tag','update','tag')"><span>修改</span></li>
+					<li onclick="modify('删除tag','delete','tag')"><span>删除</span></li>
+				</ul>
+			</div>
+			<div class="tagId" id="tagId">
+			</div>
+		</div>
+	</div>
+	
+	<div id="bg">
+	</div>
+	<div class="box" style="display: none">
+		<div class="title" id="title"></div>
+		<div style="text-align: center;margin:5%">
+			<input id="addText">
+		</div>
+		<div class="end" style="text-align: center;">
+			<input id="confirm" type="button" onclick="confirm();" style="margin:5%" value="确定">
+			<input id="cancel" type="button" onclick="cancle();" style="margin:5%" value="取消">
 		</div>
 	</div>
 </div>
@@ -39,7 +128,7 @@ span{
 		var data = '';
 		var JsonData = JSON.stringify(data);
 		$.ajax({
-			url:'http://localhost:8080/pz/category/categoryList.do',
+			url:'/pz/category/categoryList.do',
 			type:'POST',
 			dataType:'json',
 			contentType:'application/json',
@@ -60,6 +149,33 @@ span{
 				html+='</table>';
 				console.log(html);
 				$('#categoryId').html(html);
+			},
+			error:function(xhr){
+				alert("123")
+			}
+		});
+		$.ajax({
+			url:'/pz/tag/tagList.do',
+			type:'POST',
+			dataType:'json',
+			contentType:'application/json',
+			data:JsonData,
+			async:false,
+			success:function(data){
+				console.log(JSON.stringify(data));
+				var html = '<table border="1" cellpadding="10">'+'<thead>'+'<td>'+'选项'+'</td>'+'<td>'+'编号'+'</td>'+'<td>'+'名称'+'</td>'+'</thead>';
+				var tags = data.dataList;
+				for(var i=0; i<tags.length; i++){
+					var tag = tags[i];
+					html+='<tr>'
+					+'<td><input type="checkbox" value="'+tag.id+'"></td>'
+					+'<td>'+tag.id+'</td>'
+					+'<td>'+tag.name+'</td>'
+					+'</tr>';
+				}
+				html+='</table>';
+				console.log(html);
+				$('#tagId').html(html);
 			},
 			error:function(xhr){
 				alert("123")

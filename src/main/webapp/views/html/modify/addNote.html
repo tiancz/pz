@@ -3,7 +3,6 @@
 <title>Blog Programming</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <link rel="stylesheet" href="../../css/common/common.css" type="text/css" />
-<link rel="stylesheet" href="../../css/common/nav.css" type="text/css" />
 <link rel="stylesheet" href="../../static/css/font-awesome.min.css" type="text/css" />
 <style type="text/css">
 span{
@@ -46,18 +45,6 @@ span{
 </script>
 </head>
 <body>
-<div class="nav">
-	<div class="menu">
-		<ul>
-			<li><a href="/zone/home/home"><i class="fa fa-home fa-fw"></i>首页</a></li>
-			<li><a href="/zone/note/archive"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-			<li><a href="/zone/note/category"><i class="fa fa-th fa-fw"></i>分类</a></li>
-			<li><a href="/zone/note/tag"><i class="fa fa-tags fa-fw"></i>标签</a></li>
-			<li><a href="/zone/about"><i class="fa fa-user fa-fw"></i>关于</a></li>
-		</ul>
-	</div>
-</div>
-
 <div class="wrapper">
 	<div class="content">
 		<div class="title" id="title">
@@ -74,8 +61,7 @@ span{
 		</div>
 		<div class="tagDiv" id="tagDiv">
 			<label>标签:</label>
-			<div class="tagId" id="tagId">
-				<span id="coffee">加奶油</span>
+			<div id="tagValue">
 			</div>
 		</div>
 		
@@ -95,13 +81,12 @@ span{
 			async:false,
 			success:function(data){
 				console.log(JSON.stringify(data));
-				var html = '<select id="categoryId" style="width:180px;text-align:center;"><option value="0">--请选择--</option>';
+				var html='';
 				var categorys = data.dataList;
 				for(var i=0; i<categorys.length; i++){
 					var category = categorys[i];
-					html+='<option value="'+category.id+'">'+category.name+'</option>';
+					html+='<input id="categoryId" name="category" type="radio" value="'+category.id+'"/><label>'+category.name+'</label>';
 				}
-				html+='</select>';
 				console.log(html);
 				$('#categoryValue').html(html);
 			},
@@ -109,36 +94,46 @@ span{
 				alert("123")
 			}
 		});
-		$("#tag span").click(function(){
-			this.setAttribute("click", "on");
-			alert(("clickv" in this));
-			if(!("clickv" in this)||this.getAttribute("clickv")=="off"){
-				this.style.backgroundColor='#ccc';
-				this.setAttribute("clickv","on");
-			}else{
-				this.style.backgroundColor='#fff';
-				this.setAttribute("clickv","off");
+		$.ajax({
+			url:'http://localhost:8080/pz/tag/tagList.do',
+			type:'POST',
+			dataType:'json',
+			contentType:'application/json',
+			data:JsonData,
+			async:false,
+			success:function(data){
+				console.log(JSON.stringify(data));
+				var html='';
+				var tags = data.dataList;
+				for(var i=0; i<tags.length; i++){
+					var tag = tags[i];
+					html+='<input type="checkbox" id="tagId" name="tag" value="'+tag.id+'"/><label>'+tag.name+'</label>';
+				}
+				console.log(html);
+				$('#tagValue').html(html);
+			},
+			error:function(xhr){
+				alert("123")
 			}
-			//this.setAttribute("click", "on");
-			/*
-			if(this.style.backgroundColor=='#fff'){
-				this.style.backgroundColor='#ccc';
-			}else{
-				this.style.backgroundColor='#fff';
-			}*/
 		});
-		$('#textContent #submit').click(function(){
+		$('#submit').click(function(){
 			var title =  $('#note_title').val();
-			var categoryId = $("#categoryId").find("option:selected").val();
+			var categoryId = $("input[name=category]:checked").val();
 			if((!categoryId)||categoryId.length==0||categoryId==0){
 				alert("请选择分类");
 				return false;
 			}
-			var tag =  $('#tag').val();
+			var tag = '';
+			$("input[name=tag]").each(function () {
+				if($(this).prop("checked")==true){
+					tag+=$(this).val()+';';
+				}
+			});
 			var data = {
 					'title':title,
 					'note':editor.getData(),
-					'categoryId':categoryId
+					'categoryId':categoryId,
+					'tagId':tag
 			}
 			var JsonData = JSON.stringify(data);
 			$.ajax({
@@ -150,7 +145,7 @@ span{
 				async:false,
 				success:function(data){
 					var id = data.article.id;
-					window.location.href ="http://localhost:8080/pz/views/html/note/noteDetail.html?id="+id;
+					window.location.href ="http://localhost:8080/pz/views/html/template/blog.html?id="+id;
 				}
 			});
 		});
