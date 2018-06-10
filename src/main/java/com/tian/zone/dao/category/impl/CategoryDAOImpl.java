@@ -20,13 +20,18 @@ import com.tian.zone.dto.article.CategoryDTO;
  **/
 @Repository("categoryDAO")
 public class CategoryDAOImpl extends BaseDAO implements CategoryDAO {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CategoryDAOImpl.class);
+	private static final Logger log = LoggerFactory.getLogger(CategoryDAOImpl.class);
 	
 	public JSONObject categoryList(JSONObject obj){
 		JSONObject result = new JSONObject();
 		List<CategoryDTO> list = CDUtil().selectList("getCategorys");
 		result.put("dataList", list);
-		LOGGER.info("result:"+JSONObject.toJSONString(list));
+		log.info("result:"+JSONObject.toJSONString(list));
 		return result;
+	}
+
+	@Override
+	public int createCategory(CategoryDTO category) {
+		return CDUtil().insert("createCategory", category);
 	}
 }

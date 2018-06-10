@@ -11,4 +11,6 @@ import com.alibaba.fastjson.JSONObject;
  **/
 public interface CategoryService {
 	public JSONObject categoryList(JSONObject obj);
+	
+	public JSONObject createCategory(JSONObject req);
 }

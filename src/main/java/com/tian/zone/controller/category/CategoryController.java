@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,7 +22,7 @@ import com.tian.zone.service.category.CategoryService;
 @Controller
 @RequestMapping("/category")
 public class CategoryController {
-	private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
+	private static final Logger log = LoggerFactory.getLogger(CategoryController.class);
 	@Autowired
 	private CategoryService categoryService;
 	
@@ -29,6 +30,13 @@ public class CategoryController {
 	public @ResponseBody JSONObject categoryList(){
 		JSONObject resp = new JSONObject();
 		resp = categoryService.categoryList(new JSONObject());
+		return resp;
+	}
+	@RequestMapping(value="/createCategory.do",method=RequestMethod.POST)
+	public @ResponseBody JSONObject createCategory(@RequestBody JSONObject req){
+		JSONObject resp = new JSONObject();
+		log.info("createCategory req"+JSONObject.toJSONString(req));
+		resp = categoryService.createCategory(req);
 		return resp;
 	}
 }

@@ -12,10 +12,10 @@
 	<select id="getCategoryIdByName" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.CategoryDTO">
 		select c.category_id from coffee_blog_category c where c.category_name in (${_parameter});
 	</select>
-	<insert id="createCategory">
-		insert into coffee_blog_category(category_id,category_name,category_date)
+	<insert id="createCategory" parameterType="com.tian.zone.dto.article.CategoryDTO">
+		insert into blog_category(name,parent_id)
 		values
-		(#{id},#{name},#{date})
+		(#{name},#{parentId})
 	</insert>
 	<select id="getTagIdByTagsName" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.TagDTO">
 		select a.tag_id from coffee_blog_tag a where a.tag_name in (${_parameter})
