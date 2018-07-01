@@ -29,6 +29,7 @@
 	color: #9eabb3
 }
 </style>
+<base target="_self" />
 </head>
 <body class="post-template">
    	<nav class="page-nav">
@@ -52,27 +53,12 @@
 <div class="page-main">
 	<div class="mask"></div>
 	
-	<header class="post-page-header animated fadeInDown">
-	    <h1 class="title" id="title"></h1>
-	    <time class="datetime" id="datetime"></time>
-	</header>
 	<div class="container">
 	    <div class="container-main">
 	        <article class="post-page-main">
 	            <section class="post-page-content animated fadeInDown">
 	            	<div class="content" id="content"></div>
 	            </section>
-	            <footer class="animated fadeInDown">
-	                <div class="post-page-tags">
-	                   	 标签：<a href="#">读写分离</a>, <a href="#">Java</a>
-	                </div>
-	                <div class="post-page-readmore">
-	                    <div class="post-page-readmore-prev" id="next">
-	                    </div>
-	                    <div class="post-page-readmore-next" id="pre">
-	                    </div>
-	                </div>
-	            </footer>
 	       </article>
 	    </div>
 	</div>
@@ -128,13 +114,9 @@ $(document).ready(function(){
 					html += '<div class="blog">'
 						+'<div class="title">'
 						+'<span>'
-						+'<a href="blog.html?id='+article.id+'" target="_self">'+article.title+'</a>'
+						+'<a href="blog.html?id='+article.id+'" target="_self" style="font-size:20px;color:#6699CC;">'+article.title+'</a>'
 						+'</span>'
 						+'</div>'
-						+'<div class="info">'
-						+'<span class="date" style="color:#4a86e8">write by '+article.dateCreated+'</span>'
-						+'</div>'
-						+'<div class="blogContent">'+article.content+'</div>'
 						+'</div>';
 				}
 			}
