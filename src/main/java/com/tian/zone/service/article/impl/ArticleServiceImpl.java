@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tian.zone.dao.article.ArticleDAO;
 import com.tian.zone.dao.tag.TagDAO;
@@ -43,25 +44,68 @@ public class ArticleServiceImpl implements ArticleService {
 		return articles;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, List<ArticleDTO>> getAllArticle(JSONObject req) {
-		Map<String, List<ArticleDTO>> result = new HashMap<>();
+	public Map<String, Object> getAllArticle(JSONObject req) {
+		Map<String, Object> result = new HashMap<>();
 		List<ArticleDTO> articles = articleDao.getAllArticle();
 		log.info("articles:"+JSONObject.toJSONString(articles));
 		String type = req.getString("type");
 		log.info("type:"+type);
-		for (ArticleDTO articleDTO : articles) {
-			if("time".equals(type)){
+		if("time".equals(type)){
+			for (ArticleDTO articleDTO : articles) {
 				String time = articleDTO.getDateCreated();
-				if(result.containsKey(time)){
-					result.get(time).add(articleDTO);
+				String[] dates = time.split(" ");
+				time = dates[0];
+				String[] times = time.split("-");
+				String year = times[0];
+				String month = times[1];
+				String day = times[2];
+				//log.info("----"+JSONObject.toJSONString(times));
+				if(result.containsKey(year)){
+					JSONArray yearJson = (JSONArray)result.get(year);
+					if(!yearJson.isEmpty()&&yearJson.size()>0){
+						for (int i=0;i<yearJson.size();i++ ) {
+							JSONArray monthJson = yearJson.getJSONArray(i);
+							if(!monthJson.isEmpty()&&monthJson.size()>0){
+								for (int j=0;j<monthJson.size();j++ ) {
+									JSONArray dayJson = monthJson.getJSONArray(i);
+									if(!dayJson.isEmpty()&&dayJson.size()>0){
+										for (int t=0;t<monthJson.size();t++ ) {
+											JSONObject dayObj = new JSONObject();
+											dayObj.put(day, articleDTO);
+											((JSONArray)result.get(year)).getJSONArray(i).getJSONArray(j);
+										}
+									}
+								}
+							}
+						}
+					}
+					if(yearJson.containsKey(month)){
+						JSONObject monthJson = (JSONObject)yearJson.get(month);
+						if(monthJson.containsKey(day)){
+							JSONObject dayJson = (JSONObject)yearJson.get(day);
+							dayJson.put(day, articleDTO);
+							monthJson.put(month, dayJson);
+							yearJson.put(year, monthJson);
+							result.put("time", yearJson);
+						}else{
+							JSONObject dayJson = new JSONObject();
+							result.put(year, dayJson);
+						}
+					}else{
+						JSONObject monthJson = new JSONObject();
+						result.put(year, monthJson);
+					}
 				}else{
-					List<ArticleDTO> newArticles = new ArrayList<>();
-					newArticles.add(articleDTO);
-					result.put(time, newArticles);
+					JSONObject yearJson = new JSONObject();
+					result.put(year, yearJson);
 				}
+				log.info("result----"+JSONObject.toJSONString(result));
 			}
-			if("tag".equals(type)){
+		}
+		if("tag".equals(type)){
+			for (ArticleDTO articleDTO : articles) {
 				String tag = articleDTO.getTag();
 				if(ObjectUtils.isEmpty(tag)){
 					List<ArticleDTO> newArticles = new ArrayList<>();
@@ -69,7 +113,7 @@ public class ArticleServiceImpl implements ArticleService {
 					result.put("无标签", newArticles);
 				}else{
 					if(result.containsKey(tag)){
-						result.get(tag).add(articleDTO);
+						((List<ArticleDTO>)(result.get(tag))).add(articleDTO);
 					}else{
 						List<ArticleDTO> newArticles = new ArrayList<>();
 						newArticles.add(articleDTO);
@@ -77,7 +121,9 @@ public class ArticleServiceImpl implements ArticleService {
 					}
 				}
 			}
-			if("category".equals(type)){
+		}
+		if("category".equals(type)){
+			for (ArticleDTO articleDTO : articles) {
 				String category = articleDTO.getCategory();
 				if(ObjectUtils.isEmpty(category)){
 					List<ArticleDTO> newArticles = new ArrayList<>();
@@ -85,7 +131,7 @@ public class ArticleServiceImpl implements ArticleService {
 					result.put("未分类", newArticles);
 				}else{
 					if(result.containsKey(category)){
-						result.get(category).add(articleDTO);
+						((List<ArticleDTO>)result.get(category)).add(articleDTO);
 					}else{
 						List<ArticleDTO> newArticles = new ArrayList<>();
 						newArticles.add(articleDTO);

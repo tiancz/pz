@@ -38,7 +38,7 @@ public class ArticleController {
 	public @ResponseBody String articleList(@RequestBody JSONObject req){
 		LOGGER.info("req:"+JSONObject.toJSONString(req));
 		JSONObject resp = new JSONObject();
-		Map<String,List<ArticleDTO>> article = articleService.getAllArticle(req);
+		Map<String,Object> article = articleService.getAllArticle(req);
 		resp.put("articles", article);
 		LOGGER.info("resp:"+JSONObject.toJSONString(resp));
 		return resp.toJSONString();

@@ -17,7 +17,7 @@ public interface ArticleService {
 	
 	public List<ArticleDTO> getAllArticle();
 	
-	public Map<String,List<ArticleDTO>> getAllArticle(JSONObject req);
+	public Map<String,Object> getAllArticle(JSONObject req);
 	
 	public ArticleDTO getArticleDetail(String id);
 	public ArticleDTO next(String id);
