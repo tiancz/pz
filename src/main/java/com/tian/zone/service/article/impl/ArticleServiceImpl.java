@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.tian.zone.dao.article.ArticleDAO;
 import com.tian.zone.dao.tag.TagDAO;
@@ -53,6 +52,9 @@ public class ArticleServiceImpl implements ArticleService {
 		String type = req.getString("type");
 		log.info("type:"+type);
 		if("time".equals(type)){
+			//1.year---month---day---artile
+			//result====>Map<String=year,Map<String=month,Map<String=day,List<article>>>>
+			
 			for (ArticleDTO articleDTO : articles) {
 				String time = articleDTO.getDateCreated();
 				String[] dates = time.split(" ");
@@ -61,48 +63,83 @@ public class ArticleServiceImpl implements ArticleService {
 				String year = times[0];
 				String month = times[1];
 				String day = times[2];
-				//log.info("----"+JSONObject.toJSONString(times));
 				if(result.containsKey(year)){
-					JSONArray yearJson = (JSONArray)result.get(year);
-					if(!yearJson.isEmpty()&&yearJson.size()>0){
-						for (int i=0;i<yearJson.size();i++ ) {
-							JSONArray monthJson = yearJson.getJSONArray(i);
-							if(!monthJson.isEmpty()&&monthJson.size()>0){
-								for (int j=0;j<monthJson.size();j++ ) {
-									JSONArray dayJson = monthJson.getJSONArray(i);
-									if(!dayJson.isEmpty()&&dayJson.size()>0){
-										for (int t=0;t<monthJson.size();t++ ) {
-											JSONObject dayObj = new JSONObject();
-											dayObj.put(day, articleDTO);
-											((JSONArray)result.get(year)).getJSONArray(i).getJSONArray(j);
-										}
+					Map<String,Map<String,List<ArticleDTO>>> yearMaps = 
+							(Map<String,Map<String,List<ArticleDTO>>>)result.get(year);
+					if(!ObjectUtils.isEmpty(yearMaps)&&yearMaps.size()>0){
+						if(yearMaps.containsKey(month)){
+							Map<String,List<ArticleDTO>> monthMaps = (Map<String,List<ArticleDTO>>)
+									yearMaps.get(month);
+							if(!ObjectUtils.isEmpty(monthMaps)&&monthMaps.size()>0){
+								if(monthMaps.containsKey(day)){
+									List<ArticleDTO> dayList = (List<ArticleDTO>)monthMaps.get(day);
+									if(!ObjectUtils.isEmpty(dayList)&&dayList.size()>0){
+										dayList.add(articleDTO);
+									}else{
+										dayList = new ArrayList<>();
+										dayList.add(articleDTO);
 									}
+								}else{
+									List<ArticleDTO> dayList = new ArrayList<>();
+									dayList.add(articleDTO);
+									monthMaps.put(day, dayList);
 								}
+							}else{
+								monthMaps = new HashMap<>(31);
+								List<ArticleDTO> dayList = new ArrayList<>();
+								dayList.add(articleDTO);
+								monthMaps.put(day, dayList);
 							}
-						}
-					}
-					if(yearJson.containsKey(month)){
-						JSONObject monthJson = (JSONObject)yearJson.get(month);
-						if(monthJson.containsKey(day)){
-							JSONObject dayJson = (JSONObject)yearJson.get(day);
-							dayJson.put(day, articleDTO);
-							monthJson.put(month, dayJson);
-							yearJson.put(year, monthJson);
-							result.put("time", yearJson);
 						}else{
-							JSONObject dayJson = new JSONObject();
-							result.put(year, dayJson);
+							Map<String,List<ArticleDTO>> monthMaps = new HashMap<>(31);
+							List<ArticleDTO> dayList = new ArrayList<>();
+							dayList.add(articleDTO);
+							monthMaps.put(day, dayList);
+							yearMaps.put(month, monthMaps);
 						}
 					}else{
-						JSONObject monthJson = new JSONObject();
-						result.put(year, monthJson);
+						yearMaps = new HashMap<>(12);
+						Map<String,List<ArticleDTO>> monthMaps = new HashMap<>(31);
+						List<ArticleDTO> dayList = new ArrayList<>();
+						dayList.add(articleDTO);
+						monthMaps.put(day, dayList);
+						yearMaps.put(month, monthMaps);
 					}
 				}else{
-					JSONObject yearJson = new JSONObject();
-					result.put(year, yearJson);
+					Map<String,Map<String,List<ArticleDTO>>> yearMaps = new HashMap<>(12);
+					Map<String,List<ArticleDTO>> monthMaps = new HashMap<>(31);
+					List<ArticleDTO> dayList = new ArrayList<>();
+					dayList.add(articleDTO);
+					monthMaps.put(day, dayList);
+					yearMaps.put(month, monthMaps);
+					result.put(year, yearMaps);
 				}
-				log.info("result----"+JSONObject.toJSONString(result));
 			}
+			//2.year---month day artile
+			//result====>Map<String=year,Map<String=month+day+title,article>>
+			
+			//result = (Map<String, Object>)articles.stream().collect(Collectors.
+			//toMap(article->article.getDateCreated().subString(4)+article.getTitle(), article->article));
+			/*
+			for (ArticleDTO articleDTO : articles) {
+				String time = articleDTO.getDateCreated();
+				String[] dates = time.split(" ");
+				time = dates[0];
+				String[] times = time.split("-");
+				String year = times[0];
+				String month = times[1];
+				String day = times[2];
+				String title = articleDTO.getTitle();
+				
+				if(result.containsKey(year)){
+					Map<String,ArticleDTO> artilesMap = (Map<String,ArticleDTO>)result.get(year);
+					artilesMap.put(month+"-"+day+"-"+title, articleDTO);
+				}else{
+					Map<String,ArticleDTO> artilesMap = new HashMap<>();
+					artilesMap.put(month+"-"+day+"-"+title, articleDTO);
+					result.put(year, artilesMap);
+				}
+			}*/
 		}
 		if("tag".equals(type)){
 			for (ArticleDTO articleDTO : articles) {
