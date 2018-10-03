@@ -1,6 +1,9 @@
 package com.tian.zone.service.tag;
 
+import java.util.List;
+
 import com.alibaba.fastjson.JSONObject;
+import com.tian.zone.dto.article.TagDTO;
 
 /**
  * <p>Title:TagService</p>
@@ -10,6 +13,6 @@ import com.alibaba.fastjson.JSONObject;
  * @date 2018年6月6日 上午12:18:37
  **/
 public interface TagService {
-	public JSONObject tagList(JSONObject obj);
-	public JSONObject addTag(JSONObject obj);
+	public List<TagDTO> tagList(List<Integer> ids);
+	public JSONObject addTag(TagDTO tag);
 }

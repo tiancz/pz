@@ -1,10 +1,11 @@
 package com.tian.zone.service.category.impl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.tian.zone.dao.category.CategoryDAO;
@@ -23,23 +24,14 @@ public class CategoryServiceImpl implements CategoryService {
 	private static final Logger log = LoggerFactory.getLogger(CategoryServiceImpl.class);
 	@Autowired
 	private CategoryDAO categoryDAO;
-	public JSONObject categoryList(JSONObject obj){
-		return categoryDAO.categoryList(obj);
+	public List<CategoryDTO> categoryList(){
+		return categoryDAO.categoryList();
 	}
 	
 	@Override
-	public JSONObject createCategory(JSONObject req) {
-		CategoryDTO category = new CategoryDTO();
-		String name = req.getString("name");
-		String parentId = req.getString("parentId");
-		if(!ObjectUtils.isEmpty(name)){
-			category.setName(name);
-		}
-		if(!ObjectUtils.isEmpty(parentId)){
-			category.setParentId(parentId);
-		}
-		int result = categoryDAO.createCategory(category);
+	public int createCategory(CategoryDTO category) {
+		int result = categoryDAO.insertCategory(category);
 		log.info("insert category's result:"+JSONObject.toJSONString(result));
-		return null;
+		return 0;
 	}
 }

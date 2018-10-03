@@ -1,6 +1,7 @@
 package com.tian.zone.dao.category;
 
-import com.alibaba.fastjson.JSONObject;
+import java.util.List;
+
 import com.tian.zone.dto.article.CategoryDTO;
 
 /**
@@ -11,6 +12,6 @@ import com.tian.zone.dto.article.CategoryDTO;
  * @date 2017年10月8日 下午3:40:07
  **/
 public interface CategoryDAO {
-	public JSONObject categoryList(JSONObject obj);
-	public int createCategory(CategoryDTO category);
+	public List<CategoryDTO> categoryList();
+	public int insertCategory(CategoryDTO category);
 }

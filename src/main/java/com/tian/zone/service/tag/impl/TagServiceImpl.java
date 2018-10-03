@@ -1,5 +1,7 @@
 package com.tian.zone.service.tag.impl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +26,13 @@ public class TagServiceImpl implements TagService {
 	@Autowired
 	private TagDAO tagDAO;
 	@Override
-	public JSONObject tagList(JSONObject obj) {
-		return tagDAO.tagList(obj);
+	public List<TagDTO> tagList(List<Integer> ids) {
+		return tagDAO.getTags(ids);
 	}
 	@Override
-	public JSONObject addTag(JSONObject obj) {
-		log.info("请求："+JSONObject.toJSONString(obj));
-		TagDTO tag = new TagDTO();
-		tag = JSONObject.toJavaObject(obj, TagDTO.class);
-		tagDAO.addTag("createTag", tag);
+	public JSONObject addTag(TagDTO tag) {
+		log.info("请求："+JSONObject.toJSONString(tag));
+		tagDAO.insertTag(tag);
 		return JSONObject.parseObject(JSONObject.toJSONString(tag));
 	}
 

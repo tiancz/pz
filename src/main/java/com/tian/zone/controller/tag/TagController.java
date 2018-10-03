@@ -1,5 +1,7 @@
 package com.tian.zone.controller.tag;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
+import com.tian.zone.dto.article.TagDTO;
 import com.tian.zone.service.tag.TagService;
 
 /**
@@ -29,7 +32,8 @@ public class TagController {
 	@RequestMapping(value="/tagList.do",method=RequestMethod.POST)
 	public @ResponseBody JSONObject tagList(){
 		JSONObject resp = new JSONObject();
-		resp = tagService.tagList(new JSONObject());
+		List<TagDTO> tagLists = (List<TagDTO>) tagService.tagList(null);
+		resp.put("dataList", tagLists);
 		return resp;
 	}
 
@@ -37,7 +41,7 @@ public class TagController {
 	public @ResponseBody JSONObject addTag(@RequestBody JSONObject req){
 		JSONObject resp = new JSONObject();
 		log.info("前端请求："+JSONObject.toJSONString(req));
-		resp = tagService.addTag(req);
+		resp = tagService.addTag(JSONObject.toJavaObject(req, TagDTO.class));
 		return resp;
 	}
 }

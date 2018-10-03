@@ -3,50 +3,6 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tian.zone.dao.article.ArticleDAO">
-
-	<resultMap type="com.tian.zone.dto.article.ArticleDTO" id="articleResultMap">
-		<id column="article_id" property="articleId"/>
-		<result column="article_title" property="articleTitle"/>
-		<result column="article_content" property="articleContent"/>
-		<result column="date_created" property="dateCreated"/>
-		<result column="date_updated" property="dateUpdated"/>
-		<result column="user_id" property="userId"/>
-		<result column="user_name" property="userName"/>
-		<result column="category_id" property="categoryId"/>
-		<result column="category" property="category"/>
-		<result column="tag_id" property="tagId"/>
-		<result column="tag" property="tag"/>
-		<result column="countComment" property="countComment"/>
-	</resultMap>
-	
-	<resultMap type="com.tian.zone.dto.article.ArticleDTO" id="articleTagResultMap">
-		<id column="tagId" property="tagId"/>
-		<result column="id" property="id"/>
-		<result column="title" property="title"/>
-		<result column="author" property="author"/>
-		<result column="content" property="content"/>
-		<result column="date_created" property="dateCreated"/>
-		<result column="date_updated" property="dateUpdated"/>
-		<result column="category_id" property="categoryId"/>
-		<result column="category" property="category"/>
-		<result column="tag" property="tag"/>
-		<association column="tagId" property="tagId" select="getArticleSubTagResult" />
-	</resultMap>
-	
-	<resultMap type="com.tian.zone.dto.article.ArticleDTO" id="articleSubTagResultMap">
-		<id column="tagId" property="tagId"/>
-		<result column="id" property="id"/>
-		<result column="title" property="title"/>
-		<result column="author" property="author"/>
-		<result column="content" property="content"/>
-		<result column="date_created" property="dateCreated"/>
-		<result column="date_updated" property="dateUpdated"/>
-		<result column="category_id" property="categoryId"/>
-		<result column="category" property="category"/>
-		<result column="tag" property="tag"/>
-	</resultMap>
-	<!-- <association column="countComment" property="articleId" select="getBlogCountComment" /> -->
-	
 	<select id="getAllArticle" resultType="com.tian.zone.dto.article.ArticleDTO">
 		SELECT
 			a.id,
@@ -65,47 +21,11 @@
 			a.date_updated desc
 	</select>
 	
-	<select id="getArticleSubTagResult" parameterType="java.lang.String" resultMap="articleSubTagResultMap">
-		SELECT
-			a.id,
-			a.title,
-			a.author,
-			a.content,
-			a.date_created,
-			a.date_updated,
-			a.category_id,
-			b.name category,
-			d.id tagId,
-			d.name tag
-		FROM
-			blog_blog a left join blog_category b on a.category_id = b.id left join blog_tags c on a.id = c.blog_id left join blog_tag d on c.tag_id = d.id
-		where d.id = #{tagId}
-		ORDER BY
-			a.date_updated desc
-	</select>
-	
-	<select id="getBlogs" resultType="com.tian.zone.dto.article.ArticleDTO">
-		select  article_id articleId,
-				article_title articleTitle,
-				article_content articleContent,
-				date_created dateCreated,
-				date_updated dateUpdated,
-				user_id userId,
-				(select u.username from coffee_user u where u.id=a.user_id) userName,
-				category_id categoryId,
-				tag_id tagId,
-				(select count(1) from coffee_article_comment b where b.article_id = a.article_id) countComment
-		 from coffee_blog_article a
-	</select>
-	
 	<select id="getBlogCountComment" parameterType="java.lang.String" resultType="java.lang.String">
 		select count(1) from coffee_article_comment a where a.article_id = #articleId#
 	</select>
 	
-	<select id="getBlogsUser" resultType="com.tian.zone.dto.article.ArticleDTO">
-		select cba.*,cu.username,cbc.category_name from coffee_blog_article cba,coffee_user cu,coffee_blog_category cbc where cu.id = cba.user_id and cba.category_id = cbc.category_id
-	</select>
-	<select id="getArticleByID" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.ArticleDTO">
+	<select id="getArticleById" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.ArticleDTO">
 		select * from blog_blog where id=#{id}
 	</select>
 	<select id="getPreByID" parameterType="java.lang.String" resultType="com.tian.zone.dto.article.ArticleDTO">

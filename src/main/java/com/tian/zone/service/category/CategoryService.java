@@ -1,6 +1,8 @@
 package com.tian.zone.service.category;
 
-import com.alibaba.fastjson.JSONObject;
+import java.util.List;
+
+import com.tian.zone.dto.article.CategoryDTO;
 
 /**
  * <p>Title:CategoryService</p>
@@ -10,7 +12,7 @@ import com.alibaba.fastjson.JSONObject;
  * @date 2018年1月19日 下午11:21:08
  **/
 public interface CategoryService {
-	public JSONObject categoryList(JSONObject obj);
+	public List<CategoryDTO> categoryList();
 	
-	public JSONObject createCategory(JSONObject req);
+	public int createCategory(CategoryDTO category);
 }

@@ -180,27 +180,20 @@ public class ArticleServiceImpl implements ArticleService {
 		return result;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public ArticleDTO getArticleDetail(String id) {
-		ArticleDTO article = articleDao.getArticleById("getArticleByID", id);
-		JSONObject req = new JSONObject();
-		req.put("blogId", id);
-		JSONObject tagJobjs = tagDAO.getTagsByBlogId(req);
-		List<TagBlogDTO> tagBlogList = (List<TagBlogDTO>)tagJobjs.get("dataList");
-		List<Integer> ids = new ArrayList<>();
+		ArticleDTO article = articleDao.getArticleById(id);
+		List<TagBlogDTO> tagBlogList = tagDAO.getTagsByBlogId(id);
+		List<Integer> ids = new ArrayList<>(tagBlogList.size());
 		for (int i = 0; i < tagBlogList.size(); i++) {
 			TagBlogDTO tagBlogDTO = tagBlogList.get(i);
 			ids.add(Integer.valueOf(tagBlogDTO.getTagId()));
 		}
 		log.info("tag's id:"+JSONObject.toJSONString(ids));
 
-		JSONObject reqTags = new JSONObject();
 		List<TagDTO> tagList = new ArrayList<>();
 		if(!ObjectUtils.isEmpty(ids)){
-			reqTags.put("ids", ids);
-			JSONObject tagObjs = tagDAO.tagList(reqTags);
-			tagList = (List<TagDTO>)tagObjs.get("dataList");
+			tagList = tagDAO.getTags(ids);
 		}
 		log.info("tags is :"+JSONObject.toJSONString(tagList));
 		String tagStr = "";
@@ -219,12 +212,12 @@ public class ArticleServiceImpl implements ArticleService {
 	}
 	@Override
 	public ArticleDTO next(String id) {
-		ArticleDTO article = articleDao.getArticleById("getNextByID", id);
+		ArticleDTO article = articleDao.getNextByID(id);
 		return article;
 	}
 	@Override
 	public ArticleDTO pre(String id) {
-		ArticleDTO article = articleDao.getArticleById("getPreByID", id);
+		ArticleDTO article = articleDao.getPreByID(id);
 		return article;
 	}
 	@Override
@@ -242,12 +235,12 @@ public class ArticleServiceImpl implements ArticleService {
 				TagBlogDTO tbDto = new TagBlogDTO();
 				tbDto.setTagId(tag);
 				tbDto.setBlogId(article.getId());
-				tagDAO.addTagBlog("createBlogTag",tbDto);
+				tagDAO.insertBlogTag(tbDto);
 				log.info("insert a tag and blog");
 			}
 		}
 		int result = 0;
-		result = articleDao.insertArticle("addArticle",article);
+		result = articleDao.addArticle(article);
 		if(result==0){
 			log.info("insertArticle failure");
 		}else{

@@ -34,6 +34,13 @@
     		</list>
     	</property>
     </bean>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    	<!--需要扫描的dao层-->
+    	<property name="basePackage" value="com.tian.zone.dao" />
+    	<!--引入上面的sqlSessionFactory-->
+    	<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+    
     <!-- dataSource配置 -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
 	    <property name="url" value="${jdbc.url}"/>

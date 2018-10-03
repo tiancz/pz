@@ -14,10 +14,14 @@ import com.tian.zone.dto.article.ArticleDTO;
  **/
 public interface ArticleDAO {
 	public List<ArticleDTO> getAllArticle();
+
+	public ArticleDTO getArticleById(String id);
 	
-	public ArticleDTO getArticleById(String sql,String id);
+	public ArticleDTO getNextByID(String id);
 	
-	public int insertArticle(String sql,ArticleDTO article);
+	public ArticleDTO getPreByID(String id);
+	
+	public int addArticle(ArticleDTO article);
 
 	public int deleteArticleById(String sql,String id);
 }
