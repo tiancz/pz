@@ -44,8 +44,8 @@ function OtherF() {
         },
         600)
     });
-    $(".post-page-content a").attr("target", "_blank");
-    $(".links-page-content a").attr("target", "_blank");
+    $(".post-page-content a").attr("target", "_self");
+    $(".links-page-content a").attr("target", "_self");
     $(".post-page-main img").attr("data-action", "zoom");
     $(".post-page-content a").addClass("down-a");
     $(".tags-page-content a").addClass("down-a");
