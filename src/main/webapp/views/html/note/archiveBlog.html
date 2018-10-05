@@ -1,13 +1,24 @@
 <html>
 <head>
-<title>Blog Programming</title>
+<title>Archive Blog</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<link rel="stylesheet" href="../../css/common/common.css" type="text/css" />
 <link rel="stylesheet" href="../../css/common/nav.css" type="text/css" />
 <link rel="stylesheet" href="../../static/css/font-awesome.min.css" type="text/css" />
 <script type="text/javascript" src="../../js/jquery/jquery-2.1.4.min.js"></script>
 <style type="text/css">
-
+.content{
+	width:850px;
+	margin:150px auto;
+	vertical-align:middle;
+}
+a{
+	text-decoration:none;
+	color:#000;
+}
+a:hover{
+	cursor:pointer;
+	color:#aaa;
+}
 </style>
 <script>
 $(document).ready(function(){
@@ -45,7 +56,7 @@ $(document).ready(function(){
 								+'<div class="title">'
 								+'<ul>'
 								+'<li>'
-								+'<a href="blog.html?id='+article.id+'">'+article.title+'</a>'
+								+'<a href="blog.html?id='+article.id+'">'+months[month]+'-'+days[day]+'  '+article.title+'</a>'
 								+'</li>'
 								+'</ul>'
 								+'</div>'
