@@ -11,45 +11,6 @@
 </style>
 <script>
 $(document).ready(function(){
-	var data = '';
-	var JsonData = JSON.stringify({});
-	$.ajax({
-		url:'http://localhost:8080/pz/archive/getYear.do',
-		type:'POST',
-		dataType:'json',
-		contentType:'application/json',
-		data:JsonData,
-		async:false,
-		success:function(data){
-			console.log(JSON.stringify(data));
-			getMonth();
-		},
-		error:function(xhr){
-			alert("查询出错")
-		}
-	});
-});
-function getMonth(){
-	var data = {
-			year:'2017'
-	};
-	var JsonData = JSON.stringify({data});
-	$.ajax({
-		url:'http://localhost:8080/pz/archive/getMonth.do',
-		type:'POST',
-		dataType:'json',
-		contentType:'application/json',
-		data:JsonData,
-		async:false,
-		success:function(data){
-			console.log(JSON.stringify(data));
-		},
-		error:function(xhr){
-			alert("查询出错")
-		}
-	});
-}
-function getArchiveBlog(){
 	var data = {
 		type:"time"
 	};
@@ -63,33 +24,34 @@ function getArchiveBlog(){
 		async:false,
 		success:function(data){
 			var html = '';
-			var times = data.articles;
-			for(time in times){
-				console.log(JSON.stringify(time));
-				var blogs = times[time];
+			var yearBlogs = data.articles;
+			var years = Object.keys(yearBlogs);
+			for(year in years){
 				html += '<div class="tag">'
 					+'<h1>'
-					+time
+					+years[year]
 					+'</h1>'
 					+'</div>';
-				for(blog in blogs){
-					var article = blogs[blog];
-					html += '<div class="blog">'
-						+'<div class="title">'
-						+'<ul>'
-						+'<li>'
-						+'<a href="noteDetail.html?id='+article.id+'">'+article.title+'</a>'
-						+'</li>'
-						+'</ul>'
-						+'</div>'
-						+'<div class="info">'
-						+'<span class="date" style="color:#4a86e8">write by '+article.dateCreated+'</span>'
-						+'</div>'
-						+'<div class="blogContent">'+article.content+'</div>'
-						+'<div class="blogFoot" style="color:#4a86e8">'
-						+'阅读('+article.countComment+') 评论('+article.countComment+')'
-						+'</div>'
-						+'</div>';
+				var monthBlogs = yearBlogs[years[year]];
+				var months = Object.keys(monthBlogs);
+				for(month in months){
+					var dayBlogs = monthBlogs[months[month]];
+					var days = Object.keys(dayBlogs);
+					for(day in days){
+						var blogs = dayBlogs[days[day]];
+						for(blog in blogs){
+							var article = blogs[blog];
+							html += '<div class="blog">'
+								+'<div class="title">'
+								+'<ul>'
+								+'<li>'
+								+'<a href="blog.html?id='+article.id+'">'+article.title+'</a>'
+								+'</li>'
+								+'</ul>'
+								+'</div>'
+								+'</div>';
+						}
+					}
 				}
 			}
 			console.log(JSON.stringify(html));
@@ -99,7 +61,7 @@ function getArchiveBlog(){
 			alert("查询出错")
 		}
 	});
-}
+});
 </script>
 </head>
 <body>

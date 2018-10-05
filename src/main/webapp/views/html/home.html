@@ -31,10 +31,8 @@
 <script type="text/javascript">
     var editor = null;
     window.onload = function(){
-    	//CKFinder.setupCKEditor();
         editor = CKEDITOR.replace('ckeditor'); //参数‘ckeditor’是textarea元素的name属性值，而非id属性值
         editor.getData();
-        CKFinder.setupCKEditor( editor, '../' ) ;
     }
 </script>
 <script type="text/javascript">

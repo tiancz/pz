@@ -28,19 +28,12 @@ span{
 <script type="text/javascript" src="../../js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="../../ckeditor/ckeditor.js"></script>
 <script type="text/javascript" src="../../ckeditor/config.js"></script>
-<script type="text/javascript" src="../../ckfinder/ckfinder.js"></script>
 <script type="text/javascript">
     var editor = null;
     window.onload = function(){
-    	//CKFinder.setupCKEditor();
-        editor = CKEDITOR.replace('ckeditor');//参数‘ckeditor’是textarea元素的name属性值，而非id属性值
-        editor.getData();
-        CKFinder.setupCKEditor( editor, '../' ) ;
-        editor.on("instanceReady", function (evt) {
-        	editor.addCommand("save", {exec: function (editor) {
-        		alert(editor.getData());
-        	}});
-        });
+        editor = CKEDITOR.replace('ckeditor',{
+        	filebrowserImageUploadUrl : '/pz/image/upload.do'
+        });//参数‘ckeditor’是textarea元素的name属性值，而非id属性值
     }
 </script>
 </head>
