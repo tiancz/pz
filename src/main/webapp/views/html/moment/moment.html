@@ -2,104 +2,153 @@
 <head>
 <title>Moment</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<link rel="stylesheet" href="/pz/views/css/common/common.css" type="text/css" />
-<link rel="stylesheet" href="/pz/views/css/common/nav.css" type="text/css" />
+<link rel="stylesheet" href="../../css/common/common.css" type="text/css" />
+<link rel="stylesheet" href="../../css/common/nav.css" type="text/css" />
+<link rel="stylesheet" href="../../static/css/font-awesome.min.css" type="text/css" />
+<script type="text/javascript" src="../../js/jquery/jquery-2.1.4.min.js"></script>
 <style type="text/css">
-	.input_text{
-		padding:6px;
-		width-max:950px;
-		width:550px;
-		height-max:100px;
-		border:1px solid #ccc;
-	}
-	.input_text #moment{
-		width-max:950px;
-		width:550px;
-		height-max:100px;
-		border:0px solid #ccc;
-		outline:none;
-		display:inline-block;
-		resize:none;
-	}
-	.blogCon span{
-		color:#0082ff;
-	}
+.momentInput{
+	width:850px;
+	margin:150px 80px;
+	vertical-align:middle;
+}
+.input_text{
+	padding:6px;
+	width-max:950px;
+	width:550px;
+	height-max:100px;
+	border:1px solid #ccc;
+}
+.input_text #moment{
+	width-max:950px;
+	width:550px;
+	height-max:100px;
+	border:0px solid #ccc;
+	outline:none;
+	display:inline-block;
+	resize:none;
+}
+#moment_submit{
+	margin:5;
+}
+.blogCon span{
+	color:#0082ff;
+}
+.wrapper{
+	width:850px;
+	margin:80px auto;
+	vertical-align:middle;
+}
+#content{
+	margin:10px auto;
+}
 </style>
-<script type="text/javascript" src="/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
-<script type="text/javascript" src="/pz/views/js/vue/vue.js"></script>
 <script>
-	//$(document).ready(function(){
-		function checkData(){
-			if(checkword()){
-				document.getElementById("inputForm").submit();
-			}
-		}
-		function checkword(){
-			var moment = document.getElementById("moment");
-			var momentword = moment.value;
-			if(momentword.length>0){
-				if(momentword.length>140){
-					alert("too many words,make sure that within 140 words.");
-					return false;
-				}else{
-					return true;
+	$(document).ready(function(){
+		all();
+	});
+	function all(){
+		var data = '';
+		var JsonData = JSON.stringify(data);
+		$.ajax({
+			url:'http://localhost:8080/pz/moment/all.do',
+			type:'POST',
+			dataType:'json',
+			contentType:'application/json',
+			data:JsonData,
+			async:false,
+			success:function(data){
+				console.log(JSON.stringify(data));
+				var html = '';
+				var moments = data.result;
+				for(var i=0; i<moments.length; i++){
+					var moment = moments[i];
+					html+='<div class="blog">'
+						+'<div class="blogCon" style="font-size:16;">'
+						+'<span class="momentContent" style="color:#4a86e8">'+moment.content+'</span>'
+						+'</div>'
+						+'<div class="blogCon" style="font-size:6;">'
+						+'<span class="momentDate" style="color:#4a86e8;">'+moment.dateCreated+'</span>'
+						+'</div>'
+						+'</div>';
 				}
-			}else{
-				alert("you should input something.");
-				return false;
+				console.log(html);
+				$('#content').html(html);
+			},
+			error:function(xhr){
+				alert("123")
 			}
+		});
+	}
+	function checkData(){
+		if(checkword()){
+			var momentText = document.getElementById("moment").value;
+			var data = {
+					'content':momentText
+			}
+			var JsonData = JSON.stringify(data);
+			$.ajax({
+				url:'http://localhost:8080/pz/moment/add.do',
+				type:'POST',
+				dataType:'json',
+				contentType:'application/json',
+				data:JsonData,
+				async:false,
+				success:function(data){
+					if(data.result==1){
+						alert("发布成功！")
+					}
+					document.getElementById("moment").value = '';
+					all();
+					console.log(JSON.stringify(data));
+				},
+				error:function(xhr){
+					alert("123")
+				}
+			});
 		}
-	//});
+	}
+	function checkword(){
+		var moment = document.getElementById("moment");
+		var momentword = moment.value;
+		if(momentword.length>0){
+			if(momentword.length>140){
+				alert("too many words,make sure that within 140 words.");
+				return false;
+			}else{
+				return true;
+			}
+		}else{
+			alert("you should input something.");
+			return false;
+		}
+	}
 </script>
 </head>
 <body>
 <div class="nav">
 	<div class="menu">
 		<ul>
-			<li><a href="/zone/home/home"><i class="fa fa-home fa-fw"></i>首页</a></li>
-			<li><a href="/zone/note/archive"><i class="fa fa-archive fa-fw"></i>归档</a></li>
-			<li><a href="/zone/note/category"><i class="fa fa-th fa-fw"></i>分类</a></li>
-			<li><a href="/zone/note/tag"><i class="fa fa-tags fa-fw"></i>标签</a></li>
-			<li><a href="/zone/about"><i class="fa fa-user fa-fw"></i>关于</a></li>
+			<li><a href="../home.html"><i class="fa fa-home fa-fw"></i>首页</a></li>
+			<li><a href="../note/archiveBlog.html"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+			<li><a href="../note/categoryBlog.html"><i class="fa fa-th fa-fw"></i>分类</a></li>
+			<li><a href="../note/tagBlog.html"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+			<li><a href="../about.html"><i class="fa fa-user fa-fw"></i>关于</a></li>
 		</ul>
 	</div>
 </div>
 <div class="wrapper">
-	
 	<div class="momentInput">
-		<form id="inputForm" name="inputForm" method="post" action="createMoment">
-			<div id="momentid">
-			
-			<div id="input_text" class="input_text">
-				<textarea id="moment" name="moment" v-model="momenttext" rows="4" placeholder="生活点滴。。。"></textarea>
-			</div>
-			<div class="input_button">
-				<input id="moment_submit" name="moment_submit" 
-				v-if="seen" type="button" value="发布" onclick="checkData();"/>
-			</div>
-			
-			</div>
-		</form>
+		<div id="input_text" class="input_text">
+			<textarea id="moment" name="moment" rows="4" placeholder="生活点滴。。。"></textarea>
+		</div>
+		<div class="input_button">
+			<input id="moment_submit" name="moment_submit" type="button" value="发布" onclick="checkData();"/>
+		</div>
 	</div>
 
 	<div id="content">
-		<c:forEach items="${moments}" var="note">
-		<div class="blog">
-			<div class="blogCon" style="font-size:16;">
-				<c:out value="${note.momentContent}"/>
-				<span><c:out value="${note.dateUpdated}"/><P></span>
-  			</div>
-		</div>
-		</c:forEach>
 	</div>
 </div>
-<script>
-	var moment = new Vue({
-		el:'#momentid',
-		data:{
-			seen:true
-		}
-	})
-</script>
 </body>
 </html>
