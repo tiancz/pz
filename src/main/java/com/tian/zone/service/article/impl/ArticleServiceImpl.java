@@ -248,4 +248,31 @@ public class ArticleServiceImpl implements ArticleService {
 		}
 		return article;
 	}
+	public ArticleDTO generateArticle(ArticleDTO article) {
+		article.setId(String.valueOf(System.currentTimeMillis()));
+		article.setAuthor("nathanieltian");
+//		yyyy-MM-dd HH:mm:ss
+		article.setDateCreated(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		article.setDateUpdated(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+		String tags = article.getTag();
+		String tagArr[] = tags.split(";");
+		for (int i = 0; i < tagArr.length; i++) {
+			String tag = tagArr[i];
+			if(!ObjectUtils.isEmpty(tag)){
+				TagBlogDTO tbDto = new TagBlogDTO();
+				tbDto.setTagId(tag);
+				tbDto.setBlogId(article.getId());
+				tagDAO.insertBlogTag(tbDto);
+				log.info("insert a tag and blog");
+			}
+		}
+		int result = 0;
+		result = articleDao.addArticle(article);
+		if(result==0){
+			log.info("insertArticle failure");
+		}else{
+			log.info("insert a Article");
+		}
+		return article;
+	}
 }
