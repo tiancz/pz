@@ -2,9 +2,9 @@
 <head>
 <title>Tag Blog</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<link rel="stylesheet" href="../blog/css/common/nav.css" type="text/css" />
-<script type="text/javascript" src="../blog/js/jquery/jquery-2.1.4.min.js"></script>
-<link rel="stylesheet" href="../blog/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="css/common/nav.css" type="text/css" />
+<script type="text/javascript" src="js/jquery/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
 <style type="text/css">
 .content{
 	width:850px;
@@ -22,44 +22,22 @@ a:hover{
 </style>
 <script>
 $(document).ready(function(){
-	var data = {
-		type:"tag"
-	};
-	var JsonData = JSON.stringify(data);
-	$.ajax({
-		url:'http://localhost:8080/pz/article/articleList.do',
-		type:'POST',
-		dataType:'json',
-		contentType:'application/json',
-		data:JsonData,
-		async:false,
-		success:function(data){
-			var html = '';
-			var tags = data.articles;
-			for(tag in tags){
-				console.log(JSON.stringify(tag));
-				var blogs = tags[tag];
-				html += '<div class="tag">'
-					+'<h1>'
-					+tag
-					+'</h1>'
-					+'</div>';
-				for(blog in blogs){
-					var article = blogs[blog];
-					html += '<div class="title">'
-						+'<span>'
-						+'<a href="noteDetail.html?id='+article.id+'">'+article.title+'</a>'
-						+'</span>'
-						+'</div>';
-				}
-			}
-			console.log(JSON.stringify(html));
-			$('#content').html(html);
-		},
-		error:function(xhr){
-			alert("查询出错")
-		}
-	});
+	backTop();
+});
+function backTop() {
+    var GTop = $(document).scrollTop();
+    if (GTop > 450) {
+        $(".page-retop-btn").css("display", "block")
+    } else {
+        $(".page-retop-btn").css("display", "none")
+    }
+    setTimeout(backTop);
+}
+$(".page-retop-btn").click(function() {
+    $("html,body").animate({
+        scrollTop: 0
+    },
+    400);
 });
 </script>
 </head>

@@ -2,10 +2,10 @@
 <head>
 <title>Blog</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<link rel="stylesheet" href="../blog/css/common/common.css" type="text/css" />
-<link rel="stylesheet" href="../blog/css/common/nav.css" type="text/css" />
-<link rel="stylesheet" href="../blog/css/font-awesome.min.css" type="text/css" />
-<script type="text/javascript" src="../blog/js/jquery/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" href="css/common/common.css" type="text/css" />
+<link rel="stylesheet" href="css/common/nav.css" type="text/css" />
+<link rel="stylesheet" href="css/font-awesome.min.css" type="text/css" />
+<script type="text/javascript" src="js/jquery/jquery-2.1.4.min.js"></script>
 </head>
 <body>
 <div class="nav">
@@ -26,42 +26,22 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
-	var url=location.search;
-	if(url.indexOf("?")!=-1){
-		var str = url.substr(1);
-		strs = str.split("&");
-	}
-	var data = '';
-	var JsonData = JSON.stringify(data);
-	$.ajax({
-		url:'http://localhost:8080/pz/article/articleDetial.do?id='+strs[0].split("=")[1],
-		type:'POST',
-		dataType:'json',
-		contentType:'application/json',
-		data:JsonData,
-		async:false,
-		success:function(data){
-			console.log(JSON.stringify(data));
-			var article = data.article;
-			var html = '<div class="title">'
-			+'<span>'
-			+article.title
-			+'</span>'
-			+'</div>'
-			+'<div class="info">'
-			+'<span class="date" style="color:#4a86e8">write by '+article.dateCreated+'</span>'
-			+'</div>'
-			+'<div class="blogContent">'+article.content+'</div>'
-			+'<div class="blogFoot" style="color:#4a86e8">'
-			+'阅读('+article.countComment+') 评论('+article.countComment+')'
-			+'</div>';
-			console.log(html);
-			$('#content').html(html);
-		},
-		error:function(xhr){
-			alert("123")
-		}
-	});
+	backTop();
+});
+function backTop() {
+    var GTop = $(document).scrollTop();
+    if (GTop > 450) {
+        $(".page-retop-btn").css("display", "block")
+    } else {
+        $(".page-retop-btn").css("display", "none")
+    }
+    setTimeout(backTop);
+}
+$(".page-retop-btn").click(function() {
+    $("html,body").animate({
+        scrollTop: 0
+    },
+    400);
 });
 </script>
 </body>
