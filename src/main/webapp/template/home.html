@@ -1,0 +1,146 @@
+<html>
+<head>
+<title>{title}</title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<link rel="stylesheet" href="../blog/css/common/common.css" type="text/css" />
+<link rel="stylesheet" href="../blog/css/common/nav.css" type="text/css" />
+<link rel="stylesheet" href="../blog/css/font-awesome.min.css" type="text/css" />
+<script type="text/javascript" src="../blog/js/jquery/jquery-2.1.4.min.js"></script>
+<style type="text/css">
+.page-retop-btn {
+  padding: 10px 10px;
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  background: #222;
+  font-size: 12px;
+  opacity: 1;
+  color: #fff;
+}
+.page-retop-btn>i {
+  font-size: 16px
+}
+</style>
+</head>
+<body>
+<div class="nav">
+	<div class="menu">
+		<ul>
+			<li><a href="home.html"><i class="fa fa-home fa-fw"></i>首页</a></li>
+			<li><a href="archiveBlog.html"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+			<li><a href="categoryBlog.html"><i class="fa fa-th fa-fw"></i>分类</a></li>
+			<li><a href="tagBlog.html"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+			<li><a href="about.html"><i class="fa fa-user fa-fw"></i>关于</a></li>
+		</ul>
+	</div>
+</div>
+<div class="wrapper">
+	<div class="content" id="content">
+		<div class="blog">
+			<div class="title">
+				<span>
+					<a href="../html/note/blog.html?id='+article.id+'">{title}</a>
+				</span>
+			</div>
+			<div class="info">
+				<span class="date" style="color:#4a86e8">article.dateUpdated</span>
+			</div>
+			<div class="summary">article.content
+			当毕业不够两年，身边的朋友慢慢得有车有房有女朋友周末有自己的节目，而我觉得很多美好的事情我都遥不可及，找不到可以让自己开心的事情做，心情很不好。但是同时我觉得沉淀需要时间、努力、耐心和自律，所以我总相信艰难的时候是总会过去，迎接自己的美好生活总到来的，给自己喊一句：“加油！”。
+
+好了，牢骚发完了，最近我看了《Android Gradle权威指南》这本书，虽然书上写的内容可能比较简单，但是对于Android开发人员来说应该还是比较够用的了。所以，今天我打算结合书上的知识和自己开发项目作为例子来总结一篇关于Gradle的知识基础要点。
+
+初识Gradle
+Gradle是一个基于Apache Ant和Apache Maven概念的项目自动化建构工具。它使用一种基于Groovy的特定领域语言来声明项目设置，而不是传统的XML。当前其支持的语言限于Java、Groovy和Scala，计划未来将支持更多的语言。
+
+怎么看上面都是一段很官方的解释，对于入门的人来说简直是一个噩梦般的解释（包括以前的我）。那下面我就用通俗一点语言说说我的理解。
+
+Gradle就是工程的管理，帮我们做了依赖,打包,部署,发布,各种渠道的差异管理等工作。举个例子形容，如果我是一个做大事的少爷平时管不了这么多小事情，那Gradle就是一个贴心的秘书或者管家，把一些杂七杂八的小事情都帮我们做好了，让我们可以安心的打代码，其他事情可以交给管家管。
+
+那有人会问，既然工作都可以交给他做，为什么还要我们去了解。我想我们要管家做事，也要下达我们的命令，我们必须知道这些命令和管家的喜好才能跟他相处和谐，不然你不知道它的脾性下错命令，那后果可是很严重的。
+
+在以前实习的时候，我还用eclipse，那是导入一个网上的下载的module还需要一步步的import。但自从用了Android Studio后，Gradle很贴心的帮我完成了这个繁杂的工作，而且往往只需要添加一句话，这太神奇了，当时我是这样想的，下面我们也会说到这个。
+
+分析
+下面我就用自己项目中用到的Gradle慢慢分析：
+
+
+
+作者：19snow93
+链接：https://www.jianshu.com/p/8b8a550246bd
+來源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。当毕业不够两年，身边的朋友慢慢得有车有房有女朋友周末有自己的节目，而我觉得很多美好的事情我都遥不可及，找不到可以让自己开心的事情做，心情很不好。但是同时我觉得沉淀需要时间、努力、耐心和自律，所以我总相信艰难的时候是总会过去，迎接自己的美好生活总到来的，给自己喊一句：“加油！”。
+
+好了，牢骚发完了，最近我看了《Android Gradle权威指南》这本书，虽然书上写的内容可能比较简单，但是对于Android开发人员来说应该还是比较够用的了。所以，今天我打算结合书上的知识和自己开发项目作为例子来总结一篇关于Gradle的知识基础要点。
+
+初识Gradle
+Gradle是一个基于Apache Ant和Apache Maven概念的项目自动化建构工具。它使用一种基于Groovy的特定领域语言来声明项目设置，而不是传统的XML。当前其支持的语言限于Java、Groovy和Scala，计划未来将支持更多的语言。
+
+怎么看上面都是一段很官方的解释，对于入门的人来说简直是一个噩梦般的解释（包括以前的我）。那下面我就用通俗一点语言说说我的理解。
+
+Gradle就是工程的管理，帮我们做了依赖,打包,部署,发布,各种渠道的差异管理等工作。举个例子形容，如果我是一个做大事的少爷平时管不了这么多小事情，那Gradle就是一个贴心的秘书或者管家，把一些杂七杂八的小事情都帮我们做好了，让我们可以安心的打代码，其他事情可以交给管家管。
+
+那有人会问，既然工作都可以交给他做，为什么还要我们去了解。我想我们要管家做事，也要下达我们的命令，我们必须知道这些命令和管家的喜好才能跟他相处和谐，不然你不知道它的脾性下错命令，那后果可是很严重的。
+
+在以前实习的时候，我还用eclipse，那是导入一个网上的下载的module还需要一步步的import。但自从用了Android Studio后，Gradle很贴心的帮我完成了这个繁杂的工作，而且往往只需要添加一句话，这太神奇了，当时我是这样想的，下面我们也会说到这个。
+
+分析
+下面我就用自己项目中用到的Gradle慢慢分析：
+
+
+
+作者：19snow93
+链接：https://www.jianshu.com/p/8b8a550246bd
+來源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。当毕业不够两年，身边的朋友慢慢得有车有房有女朋友周末有自己的节目，而我觉得很多美好的事情我都遥不可及，找不到可以让自己开心的事情做，心情很不好。但是同时我觉得沉淀需要时间、努力、耐心和自律，所以我总相信艰难的时候是总会过去，迎接自己的美好生活总到来的，给自己喊一句：“加油！”。
+
+好了，牢骚发完了，最近我看了《Android Gradle权威指南》这本书，虽然书上写的内容可能比较简单，但是对于Android开发人员来说应该还是比较够用的了。所以，今天我打算结合书上的知识和自己开发项目作为例子来总结一篇关于Gradle的知识基础要点。
+
+初识Gradle
+Gradle是一个基于Apache Ant和Apache Maven概念的项目自动化建构工具。它使用一种基于Groovy的特定领域语言来声明项目设置，而不是传统的XML。当前其支持的语言限于Java、Groovy和Scala，计划未来将支持更多的语言。
+
+怎么看上面都是一段很官方的解释，对于入门的人来说简直是一个噩梦般的解释（包括以前的我）。那下面我就用通俗一点语言说说我的理解。
+
+Gradle就是工程的管理，帮我们做了依赖,打包,部署,发布,各种渠道的差异管理等工作。举个例子形容，如果我是一个做大事的少爷平时管不了这么多小事情，那Gradle就是一个贴心的秘书或者管家，把一些杂七杂八的小事情都帮我们做好了，让我们可以安心的打代码，其他事情可以交给管家管。
+
+那有人会问，既然工作都可以交给他做，为什么还要我们去了解。我想我们要管家做事，也要下达我们的命令，我们必须知道这些命令和管家的喜好才能跟他相处和谐，不然你不知道它的脾性下错命令，那后果可是很严重的。
+
+在以前实习的时候，我还用eclipse，那是导入一个网上的下载的module还需要一步步的import。但自从用了Android Studio后，Gradle很贴心的帮我完成了这个繁杂的工作，而且往往只需要添加一句话，这太神奇了，当时我是这样想的，下面我们也会说到这个。
+
+分析
+下面我就用自己项目中用到的Gradle慢慢分析：
+
+
+
+作者：19snow93
+链接：https://www.jianshu.com/p/8b8a550246bd
+來源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+			</div>
+			<hr size="2" color=#999>
+		</div>
+	</div>
+	<span class="page-retop-btn"><i class="fa fa-arrow-up"></i></span>
+</div>
+</body>
+<script type="text/javascript">
+$(document).ready(function(){
+	backTop();
+});
+function backTop() {
+    var GTop = $(document).scrollTop();
+    if (GTop > 450) {
+        $(".page-retop-btn").css("display", "block")
+    } else {
+        $(".page-retop-btn").css("display", "none")
+    }
+    setTimeout(backTop);
+}
+$(".page-retop-btn").click(function() {
+    $("html,body").animate({
+        scrollTop: 0
+    },
+    400);
+});
+</script>
+</html>

@@ -1,0 +1,32 @@
+::-webkit-scrollbar{
+  display:none;
+}
+.content{
+	width:850px;
+	margin:150px auto;
+	vertical-align:middle;
+}
+.blog{
+	margin:50px 0px;
+}
+.title{
+	font-size:26px;
+	font-weight:400;
+	font-family:'Lato',"PingFang SC","Microsoft YaHei",sans-serif;
+	text-align:center;
+}
+.info{
+	margin:10px 0px;
+	text-align:center;
+}
+.blogFoot{
+	margin:10px 0px;
+}
+a{
+	text-decoration:none;
+	color:#000;
+}
+a:hover{
+	cursor:pointer;
+	color:#aaa;
+}

@@ -1,0 +1,148 @@
+<html>
+<head>
+<title>Blog Programming</title>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<link rel="stylesheet" href="../../css/common/common.css" type="text/css" />
+<link rel="stylesheet" href="../../static/css/font-awesome.min.css" type="text/css" />
+<style type="text/css">
+span{
+	cursor:pointer;
+	margin:2px 2px;
+	-moz-user-select:none; /*火狐*/
+	-webkit-user-select:none; /*webkit浏览器*/
+	-ms-user-select:none; /*IE10*/
+	-khtml-user-select:none; /*早期浏览器*/
+	user-select:none;
+}
+#title{
+	text-align:left;
+	vertical-align:middle;
+}
+#categoryDiv{
+	margin:20px;
+}
+#tagDiv{
+	margin:20px;
+}
+</style>
+<script type="text/javascript" src="../../js/jquery/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="../../ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="../../ckeditor/config.js"></script>
+<script type="text/javascript">
+    var editor = null;
+    window.onload = function(){
+        editor = CKEDITOR.replace('ckeditor',{
+        	filebrowserImageUploadUrl : '/pz/image/upload.do'
+        });//参数‘ckeditor’是textarea元素的name属性值，而非id属性值
+    }
+</script>
+</head>
+<body>
+<div class="wrapper">
+	<div class="content">
+		<div class="title" id="title">
+			<label>题目:</label>
+			<input name="note_title" id="note_title" autofocus="autofocus" value="" style="font-size:20px;width:580px;height:30px"><p>
+		</div>
+		<div id=textContent>
+		    <textarea id="ckeditor" name="ckeditor"></textarea>
+		</div>
+		<div class="categoryDiv" id="categoryDiv" >
+			<label>分类:</label>
+			<div id="categoryValue">
+			</div>
+		</div>
+		<div class="tagDiv" id="tagDiv">
+			<label>标签:</label>
+			<div id="tagValue">
+			</div>
+		</div>
+		
+		<button type="button" id="submit">保存</button>
+	</div>
+</div>
+<script>
+	$(document).ready(function(){
+		var data = '';
+		var JsonData = JSON.stringify(data);
+		$.ajax({
+			url:'http://localhost:8080/pz/category/categoryList.do',
+			type:'POST',
+			dataType:'json',
+			contentType:'application/json',
+			data:JsonData,
+			async:false,
+			success:function(data){
+				console.log(JSON.stringify(data));
+				var html='';
+				var categorys = data.dataList;
+				for(var i=0; i<categorys.length; i++){
+					var category = categorys[i];
+					html+='<input id="categoryId" name="category" type="radio" value="'+category.id+'"/><label>'+category.name+'</label>';
+				}
+				console.log(html);
+				$('#categoryValue').html(html);
+			},
+			error:function(xhr){
+				alert("123")
+			}
+		});
+		$.ajax({
+			url:'http://localhost:8080/pz/tag/tagList.do',
+			type:'POST',
+			dataType:'json',
+			contentType:'application/json',
+			data:JsonData,
+			async:false,
+			success:function(data){
+				console.log(JSON.stringify(data));
+				var html='';
+				var tags = data.dataList;
+				for(var i=0; i<tags.length; i++){
+					var tag = tags[i];
+					html+='<input type="checkbox" id="tagId" name="tag" value="'+tag.id+'"/><label>'+tag.name+'</label>';
+				}
+				console.log(html);
+				$('#tagValue').html(html);
+			},
+			error:function(xhr){
+				alert("123")
+			}
+		});
+		$('#submit').click(function(){
+			var title =  $('#note_title').val();
+			var categoryId = $("input[name=category]:checked").val();
+			if((!categoryId)||categoryId.length==0||categoryId==0){
+				alert("请选择分类");
+				return false;
+			}
+			var tag = '';
+			$("input[name=tag]").each(function () {
+				if($(this).prop("checked")==true){
+					tag+=$(this).val()+';';
+				}
+			});
+			var data = {
+					'title':title,
+					'note':editor.getData(),
+					'categoryId':categoryId,
+					'tagId':tag
+			}
+			var JsonData = JSON.stringify(data);
+			$.ajax({
+				url:'http://localhost:8080/pz/article/addArticle.do',
+				type:'POST',
+				dataType:'json',
+				contentType:'application/json',
+				data:JsonData,
+				async:false,
+				success:function(data){
+					var id = data.article.id;
+					window.location.href ="http://localhost:8080/pz/views/html/note/noteDetail.html?id="+id;
+				}
+			});
+		});
+	});
+</script>
+</body>
+</html>
