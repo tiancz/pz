@@ -1,5 +1,6 @@
 package com.tian.zone.article;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -8,4 +9,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations="classpath:core/applicationContext.xml")
 public class ArticleTest {
 
+    @Test
+    public void out(){
+        System.out.println("hello world");
+    }
 }

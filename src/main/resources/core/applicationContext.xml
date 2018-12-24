@@ -36,7 +36,7 @@
     	</property>
     </bean> -->
     <!-- 引入配置文件 第二种 -->
-    <context:property-placeholder location="file:/home/tiancz/app/config/jdbc.properties" />
+    <context:property-placeholder location="file:/data/config/jdbc.properties" />
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
     	<!--需要扫描的dao层-->
     	<property name="basePackage" value="com.tian.zone.dao" />
