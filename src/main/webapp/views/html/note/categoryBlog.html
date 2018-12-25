@@ -2,9 +2,9 @@
 <head>
 <title>Category Blog</title>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-<link rel="stylesheet" href="/pz/views/css/common/nav.css" type="text/css" />
-<script type="text/javascript" src="/pz/views/js/jquery/jquery-2.1.4.min.js"></script>
-<link rel="stylesheet" href="/pz/views/static/css/font-awesome.min.css" type="text/css" />
+<link rel="stylesheet" href="../../css/common/nav.css" type="text/css" />
+<script type="text/javascript" src="../../js/jquery/jquery-2.1.4.min.js"></script>
+<link rel="stylesheet" href="../../static/css/font-awesome.min.css" type="text/css" />
 <style type="text/css">
 .content{
 	width:850px;
@@ -27,7 +27,7 @@ $(document).ready(function(){
 	};
 	var JsonData = JSON.stringify(data);
 	$.ajax({
-		url:'http://localhost:8080/pz/article/articleList.do',
+		url:'/article/articleList.do',
 		type:'POST',
 		dataType:'json',
 		contentType:'application/json',

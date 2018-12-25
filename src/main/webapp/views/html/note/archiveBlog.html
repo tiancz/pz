@@ -27,7 +27,7 @@ $(document).ready(function(){
 	};
 	var JsonData = JSON.stringify(data);
 	$.ajax({
-		url:'http://localhost:8080/pz/article/articleList.do',
+		url:'/article/articleList.do',
 		type:'POST',
 		dataType:'json',
 		contentType:'application/json',
@@ -56,7 +56,7 @@ $(document).ready(function(){
 								+'<div class="title">'
 								+'<ul>'
 								+'<li>'
-								+'<a href="blog.html?id='+article.id+'">'+months[month]+'-'+days[day]+'  '+article.title+'</a>'
+								+'<a href="noteDetail.html?id='+article.id+'">'+months[month]+'-'+days[day]+'  '+article.title+'</a>'
 								+'</li>'
 								+'</ul>'
 								+'</div>'
